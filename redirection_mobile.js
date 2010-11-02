@@ -10,7 +10,7 @@
 	 * The user will be redirected to the mobile version of the site (home page)
 	 * if it's trying to access the site from a mobile device. This check is
 	 * mainly done checking the User-Agent string. 
-	 * The mobile URL will be obtained appending a prefix (default is "m")) to 
+	 * The mobile URL will be obtained appending a prefix (default is "m") to 
 	 * the hostname of the current URL.
 	 * 
 	 * In same case the user needs to be redirected to the Desktop version of 
@@ -30,7 +30,7 @@
 	 *             mobile redirection), mobile_prefix (prefix appended to the 
 	 *             hostname)
 	 * @author Sebastiano Armeli-Battana
-	 * @version 0.1
+	 * @version 0.1 
 	 * 
 	 */
 	
