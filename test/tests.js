@@ -6,10 +6,23 @@
 window.TEST ={
 	
 	object : {
-		param : "isDesktopRedirection=true",
+		param : "isStandardSite",
 	
 		mobile_prefix : "m"
 	},
+	
+	sessionStorage : {	
+		item : "",
+		
+		getItem : function(name) {
+			return window.TEST.sessionStorage.name;
+		},
+		
+		setItem : function(name, value) {
+			window.TEST.sessionStorage.name = value;
+		}	
+	},
+	
 	
 	mockDocument: {
 		location : {
@@ -23,7 +36,9 @@ window.TEST ={
 			search : ""
 		},
 		
-		cookie : ""
+		cookie : "",
+		
+		referrer : ""
 	},
 	
 	mockIphoneNavigator : {
@@ -44,15 +59,15 @@ module("Redirection happening");
 test ('iPhoneRedirection()', function() {
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
 	window.TEST.object.param = "";
-	redirection_mobile(window.TEST.mockDocument, window.TEST.mockIphoneNavigator,  window.TEST.object);
-	ok (window.TEST.mockDocument.location.href === "http://m.domain.com/home", "Redirection for iPhone not happening");
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator,  window.TEST.object);
+	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for iPhone not happening");
 })
 
 test ('AndroidRedirection()', function() {
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
 	window.TEST.object.param = "";
-	redirection_mobile(window.TEST.mockDocument, window.TEST.mockAndroidNavigator, window.TEST.object);
-	ok (window.TEST.mockDocument.location.href === "http://m.domain.com/home", "Redirection for Android not happening");
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockAndroidNavigator, window.TEST.object);
+	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for Android not happening");
 })
 
 module("Redirection not happening");
@@ -60,26 +75,35 @@ module("Redirection not happening");
 test ('NoRedirectionFromDesktop()', function() {
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
 	window.TEST.object.param = "";
-	redirection_mobile(window.TEST.mockDocument, window.TEST.mockFFDesktopNavigator, window.TEST.object);
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockFFDesktopNavigator, window.TEST.object);
 	ok (window.TEST.mockDocument.location.href === "http://domain.com/home", "Error in no redirection happening");
 })
 
-test ('NoRedirectionFromMobileBecauseOfParameter()', function() {
+test ('NoRedirectionFromMobileBecauseOfSessionStorage()', function() {
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
-	window.TEST.object.param = "isDesktopRedirection=true";
-	window.TEST.mockDocument.location.search = "?" + window.TEST.object.param;
-	redirection_mobile(window.TEST.mockDocument, window.TEST.mockIphoneNavigator, window.TEST.object);
+	window.TEST.object.param = "isStandardSite";
+	window.TEST.sessionStorage.setItem("isStandardSite","true");
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.object);
 	
-	expect(2);
+	expect(1);
 	ok (window.TEST.mockDocument.location.href === "http://domain.com/home", "Error in no Redirection happening from mobile");
-	ok (window.TEST.mockDocument.cookie.indexOf(window.TEST.object.param) >= 0, "");
 })
 
 test ('NoRedirectionFromMobileBecauseOfCookie()', function() {
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
-	window.TEST.object.param = "isDesktopRedirection=true";
+	window.TEST.object.param = "isStandardSite";
+	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = window.TEST.object.param;
-	redirection_mobile(window.TEST.mockDocument, window.TEST.mockIphoneNavigator, window.TEST.object);
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.object);
+	ok (window.TEST.mockDocument.location.href === "http://domain.com/home", "Error in no Redirection happening from mobile");
+})
+
+test ('NoRedirectionFromMobile()', function() {
+	window.TEST.mockDocument.location.href = "http://domain.com/home";
+	window.TEST.object.param = "isStandardSite";
+	window.TEST.mockDocument.cookie = "";
+	window.TEST.mockDocument.referrer = "http://m.domain.com/test";
+	redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.object);
 	ok (window.TEST.mockDocument.location.href === "http://domain.com/home", "Error in no Redirection happening from mobile");
 })
 
