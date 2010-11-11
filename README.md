@@ -1,11 +1,11 @@
 # JS Mobile Redirection
 
 This "redirection_mobile" script will cover a basic scenario of full JS mobile redirection.
-The user will be redirected to the mobile version of the site (home page) if it's trying to access the site from a mobile device. 		  	     This check is mainly done checking the User-Agent string. The mobile URL will be obtained appending a prefix (default is "m")) to the hostname of the current URL.
+The user will be redirected to the mobile version of the site (home page) if it's trying to access the site from a mobile device. This check is mainly done checking the User-Agent string. The mobile URL will be obtained appending a prefix (default is "m")) to the hostname of the current URL.
 	 
-In some cases the user needs to be redirected to the Desktop version of the site from a mobile device. To achieve that, a possible solution is appending a parameter to the URL (default one is "isDesktopRedirection=true") and that's what the function checks. In that case a cookie will be set up and until the cookie exists the user will access to the desktop version from a mobile device (default expiry time is one hour after he creation of the cookie) even without the parameter appended.
+In some cases the user needs to be redirected to the Desktop version of the site from a mobile device. To achieve that, a possible solution is checking "referrer" property from the document, that is the URL string of the previous page. In that case a cookie or a new key/value in sessionStorage (for modern browsers) will be set and until the user doesn't close browser window or tab it will access to the desktop version from a mobile device.
      	
-The function is attached to the window scope, mainly for testing purpose, but to avoid that, you can use "redirection_mobile_self" script that is using the default "mobile_prefix" ("m") and the default parameter ("isDesktopRedirection=true") and it's an anonyimous self-executing function.
+The function is attached to the window scope, mainly for testing purpose, but to avoid that, you can use "redirection_mobile_self" script that is using the default "mobile_prefix" ("m") and the default parameter ("isStandardSite=true") and it's an anonyimous self-executing function.
 
 Both the scripts have their minified versions (used YUI compressor).
 
