@@ -27,9 +27,6 @@
 			// Compose the mobile hostname
 			mobile_host = mobile_prefix + "." + document.location.host,
 		
-			// Retrieve the querystring 
-			search = document.location.search,
-		
 			// Check if the UA is a mobile one
 			isUAMobile = !!(agent.match(/iPhone/i) || agent.match(/iPod/i) || 
 						agent.match(/blackberry/i) || agent.match(/android/i));
@@ -38,7 +35,7 @@
 		// the sessionStorage or in the cookie)
 		if (document.referrer.indexOf(mobile_host) >= 0) {
 			if (window.sessionStorage) {
-				window.sessionStorage.setItem(param, "true")
+				window.sessionStorage.setItem(param, "true");
 			} else {
 				document.cookie = param + "=true;expires="+
 													addTimeToDate(3600*1000).toUTCString();
