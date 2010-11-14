@@ -11,32 +11,36 @@
 	 * if it's trying to access the site from a mobile device. This check is
 	 * mainly done checking the User-Agent string. 
 	 * The mobile URL will be obtained appending a prefix (default is "m") to 
-	 * the hostname of the current URL.
+	 * the hostname of the current URL. It's used a naked domain to avoid conflict with
+	 * www.
 	 * 
 	 * In some cases the user needs to be redirected to the Desktop version of the site 
-	 * from a mobile device. To achieve that, a possible solution is checking "referrer".
-	 * In that case a cookie or a new key/value in sessionStorage (for modern browsers) 
+	 * from a mobile device. To achieve that, a possible solution is checking the "referrer".
+	 * In that case a new key/value in sessionStorage (for modern browsers) 
 	 * will be set and until the user doesn't close browser window or tab it will access
-	 * to the desktop version from a mobile device.
+	 * to the desktop version from a mobile device. There is a fallback for old browsers that
+	 * don’t support sessionStorage, and it will use a cookie. The cookie that makes the access 
+	 * to the desktop version from a mobile device possible will expiry in one hour (default value)
+	 * or you configure the expiry time.
+	 * 
+	 * To use this function, you need to call it as SA.redirection_mobile(config);
+	 * E.g. SA.redirection_mobile ({param:"isDefault", mobile_prefix : "mobile", cookie_hours : "2" })
 	 *
-	 * The function is attached to the window scope, mainly for testing purpose, but to 
-	 * avoid that, you can use "redirection_mobile_self" script that is using the default 
-	 * "mobile_prefix" ("m") and the default parameter ("isStandardSite=true") and it's an 
-	 * anonyimous self-executing function.
-	 *
-	 * @param document
-	 * @param window
-	 * @param navigator
-	 * @param object containing two fields: param (parameter to be passed to avoid
-	 *             mobile redirection), mobile_prefix (prefix appended to the 
-	 *             hostname)
 	 * @author Sebastiano Armeli-Battana
-	 * @version 0.2 
+	 * @version 0.3 
 	 * 
 	 */
 	
-	/*globals window, redirection_mobile, document, navigator, location */
-	window.redirection_mobile = function(document, window, navigator, object) {
+	/*globals window,document, navigator, SA */
+	if (!window.SA) {window.SA = {};}
+
+    /*
+	 * @param config containing two fields: param (parameter to be passed to avoid
+	 *             mobile redirection), mobile_prefix (prefix appended to the 
+	 *             hostname), cookie_hours (number of hours cookie needs to exist after
+	 *			redirection to desktop site)
+	*/
+	SA.redirection_mobile = function(config) {
 		
 		// Helper function
 		var addTimeToDate = function(msec) {
@@ -56,35 +60,45 @@
 		var agent = navigator.userAgent.toLowerCase(),
 		
 			// param value or default value
-			param = object.param || "isStandardSite",
+			param = config.param || "isStandardSite",
+			
+			// Constant
+			TRUE = "true",
 		
-			//"m" is the default mobile hostname prefix 
-			mobile_prefix = object.mobile_prefix || "m",
+			// "m" is the default mobile hostname prefix 
+			mobile_prefix = config.mobile_prefix || "m",
+			
+			// URL host of incoming request
+		    host = document.location.host,
 		
 			// Compose the mobile hostname
-			mobile_host = mobile_prefix + "." + document.location.host,
+			mobile_host = mobile_prefix + "." + 
+							(!!host.match(/^www\./i) ?
+								host.substring(4) : 
+									host),
+			
+			// Expiry hours for cookie
+			cookie_hours = config.cookie_hours || 1,
 		
-			// Retrieve the querystring 
-			search = document.location.search,
-		
-			// Check if the UA is a mobile one
+			// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
 			isUAMobile = !!(agent.match(/iPhone/i) || agent.match(/iPod/i) || 
-						agent.match(/blackberry/i) || agent.match(/android/i));
+			              agent.match(/iPad/i) || agent.match(/blackberry/i) || 
+						   agent.match(/android/i));
 		
-		// Check if the referrer was a mobile page (in that case we need to set a variable in 
-		// the sessionStorage or in the cookie)
+		// Check if the referrer was a mobile page of the site
+		// (in that case we need to set a variable in the sessionStorage or in the cookie)
 		if (document.referrer.indexOf(mobile_host) >= 0) {
 			if (window.sessionStorage) {
-				window.sessionStorage.setItem(param, "true")
+				window.sessionStorage.setItem(param, TRUE);
 			} else {
-				document.cookie = param + "=true;expires="+
-													addTimeToDate(3600*1000).toUTCString();
+				document.cookie = param + "=" + TRUE + ";expires="+
+													addTimeToDate(3600*1000*cookie_hours).toUTCString();
 			}
 		}
 		
 		// Check if the sessionStorage contain the parameter
 		var isSessionStorage = (window.sessionStorage) ? 
-								(window.sessionStorage.getItem(param) === "true") :
+								(window.sessionStorage.getItem(param) === TRUE) :
 								 false,
 			
 			// Check if the Cookie has been set up
@@ -94,9 +108,6 @@
 								
 		// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 		if (isUAMobile && !(isCookieSet || isSessionStorage)) {
-		   document.location.href = document.location.protocol + "//" + mobile_prefix + 
-										"."+ document.location.host;
+		   document.location.href = document.location.protocol + "//" + mobile_host;
 		} 
-		
-		
 	};	
