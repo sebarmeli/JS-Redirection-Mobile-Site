@@ -1,26 +1,5 @@
 # JS Mobile Redirection
 
-* This script will cover a basic scenario of full JS mobile redirection.
-* The user will be redirected to the mobile version of the site (home page)
-* if it's trying to access the site from a mobile device. This check is
-* mainly done checking the User-Agent string. 
-* The mobile URL will be obtained appending a prefix (default is "m") to 
-* the hostname of the current URL. It's used a naked domain to avoid conflict with
-* www.
-* 
-* In some cases the user needs to be redirected to the Desktop version of the site 
-* from a mobile device. To achieve that, a possible solution is checking the "referrer".
-* In that case a new key/value in sessionStorage (for modern browsers) 
-* will be set and until the user doesn't close browser window or tab it will access
-* to the desktop version from a mobile device. There is a fallback for old browsers that
-* don’t support sessionStorage, and it will use a cookie. The cookie that makes the access 
-* to the desktop version from a mobile device possible will expiry in one hour (default value)
-* or you configure the expiry time.
-* 
-* To use this function, you need to call it as SA.redirection_mobile(config);
-* E.g. SA.redirection_mobile ({param:"isDefault", mobile_prefix : "mobile", cookie_hours : "2" })
-*
-
 This "redirection_mobile" script will cover a basic scenario of full JS mobile redirection.
 The user will be redirected to the mobile version of the site (home page) if it's trying to access the site from a mobile device. This check is mainly done checking the User-Agent string. The mobile URL will be obtained appending a prefix (default is "m")) to the hostname of the current URL.
 	 
