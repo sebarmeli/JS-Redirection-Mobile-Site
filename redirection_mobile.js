@@ -6,26 +6,25 @@
 	 */	
 	/*
 	Copyright (c) 2010 Sebastiano Armeli-Battana (http://sebarmeli.com)
+	
+	Permission is hereby granted, free of charge, to any person obtaining
+	a copy of this software and associated documentation files (the
+	"Software"), to deal in the Software without restriction, including
+	without limitation the rights to use, copy, modify, merge, publish,
+	distribute, sublicense, and/or sell copies of the Software, and to
+	permit persons to whom the Software is furnished to do so, subject to
+	the following conditions:
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy of
-	this software and associated documentation files (the "Software"), to deal in
-	the Software without restriction, including without limitation the rights to
-	use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-	of the Software, and to permit persons to whom the Software is furnished to do
-	so, subject to the following conditions:
+	The above copyright notice and this permission notice shall be
+	included in all copies or substantial portions of the Software.
 
-	The above copyright notice and this permission notice shall be included in all
-	copies or substantial portions of the Software.
-
-	The Software shall be used for Good, not Evil.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-	SOFTWARE.
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+	LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	*/
 
 	/*
@@ -49,6 +48,7 @@
 	 * To use this function, you need to call it as SA.redirection_mobile(config);
 	 * E.g. SA.redirection_mobile ({param:"isDefault", mobile_prefix : "mobile", cookie_hours : "2" })
 	 *
+	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
 	 * @version 0.3 
 	 * 
@@ -57,7 +57,7 @@
 	/*globals window,document, navigator, SA */
 	if (!window.SA) {window.SA = {};}
 
-    /*
+	/*
 	 * @param config containing two fields: param (parameter to be passed to avoid
 	 *             mobile redirection), mobile_prefix (prefix appended to the 
 	 *             hostname), cookie_hours (number of hours cookie needs to exist after
@@ -105,8 +105,8 @@
 		
 			// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
 			isUAMobile = !!(agent.match(/iPhone/i) || agent.match(/iPod/i) || 
-			              agent.match(/iPad/i) || agent.match(/blackberry/i) || 
-						   agent.match(/android/i));
+			              	agent.match(/iPad/i) || agent.match(/blackberry/i) || 
+						   		agent.match(/android/i));
 		
 		// Check if the referrer was a mobile page of the site
 		// (in that case we need to set a variable in the sessionStorage or in the cookie)
@@ -122,7 +122,7 @@
 		// Check if the sessionStorage contain the parameter
 		var isSessionStorage = (window.sessionStorage) ? 
 								(window.sessionStorage.getItem(param) === TRUE) :
-								 false,
+									false,
 			
 			// Check if the Cookie has been set up
 			isCookieSet = document.cookie ? 

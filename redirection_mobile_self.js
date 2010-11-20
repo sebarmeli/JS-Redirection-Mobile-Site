@@ -1,8 +1,9 @@
 	/*!
 	* JS Redirection Mobile
 	*
-	* Developed by
-	* Sebastiano Armeli-Battana (@sebarmeli) - http://sebarmeli.com
+	* Copyright (c) 2010 Sebastiano Armeli-Battana (http://sebarmeli.com)
+	* MIT Licensed: http://www.opensource.org/licenses/mit-license.php
+	* @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	*/
 
 	/* 
