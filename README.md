@@ -16,7 +16,7 @@ The scripts have their minified versions (used YUI compressor).
 
 #Who is using it?
 
-Holden Australia (http://www.holden.com.au), Cityweb (http://www.cityweb.co.uk)
+Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/) 
 
 #Update 21/11/2010:
 
