@@ -14,7 +14,12 @@ I also created "redirection_mobile_testable.js" that is just a copy from "redire
 
 The scripts have their minified versions (used YUI compressor).
 
-Update 21/11/2010:
+#Who is using it?
+
+Holden Australia (http://www.holden.com.au), Cityweb (http://www.cityweb.co.uk)
+
+#Update 21/11/2010:
+
 All main mobile devices have been considered.
 
 Feel free to fork it!
