@@ -22,6 +22,10 @@ Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/
 
 All main mobile devices have been considered.
 
+#Update 20/12/2010:
+
+Fixed a critical issue on IE
+
 Feel free to fork it!
 	
 	
