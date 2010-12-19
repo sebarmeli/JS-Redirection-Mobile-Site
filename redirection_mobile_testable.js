@@ -65,7 +65,7 @@
 			cookie_hours = config.cookie_hours || 1,
 		
 			// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
-			isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|SIE|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone)/i));
+			isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone)/i));
 		
 		// Check if the referrer was a mobile page of the site
 		// (in that case we need to set a variable in the sessionStorage or in the cookie)
