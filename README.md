@@ -41,7 +41,3 @@ All main mobile devices have been considered.
 Fixed a critical issue on IE
 
 Feel free to fork it!
-	
-	
-	
-	 
