@@ -10,19 +10,32 @@ There is a fallback for old browsers that don't support sessionStorage, and it w
 
 To use this function, you need to import the script in you page and call the SA.redirection_mobile() in a similar way as below:
 
-&lt;script src="/js/redirection_mobile.js"&gt;&lt;/script&gt;
-&lt;script&gt;
-	 SA.redirection_mobile ({
-		param:"isDefault",
-		mobile_prefix : "mobile",
-	cookie_hours : "2" 
-	});
-&lt;/script&gt;
+<pre>
+	<code>
+		&lt;script src="/js/redirection_mobile.js"&gt;&lt;/script&gt;
+	</code>
+</pre>
+<pre>
+	<code>
+		&lt;script&gt;
+			 SA.redirection_mobile ({
+				param:"isDefault",
+				mobile_prefix : "mobile",
+			cookie_hours : "2" 
+			});
+		&lt;/script&gt;
+	</code>
+</pre>
 
 
 Alternatively you can use "redirection_mobile_self.js", that is an anonyimous self-executing function and it uses the default values for "mobile_prefix" ("m"),  for "param" ("isStandardSite") and for cookie_hours (1). It doesn't need any configuration or any invocation, so you just need to drop it in your webserver and call the script from your HTML.
 
-&lt;script src="/js/redirection_mobile_self.js"&gt;&lt;/script&gt;
+<pre>
+	<code>
+		&lt;script src="/js/redirection_mobile_self.js"&gt;&lt;/script&gt;
+	</code>
+</pre>
+
 
 I also created "redirection_mobile_testable.js" that is just a copy from "redirection_mobile.js", but it's using few arguments such as "document", "window", "navigator" for testing purpose. Test cases have been written, using QUnit, to test this script.
 
