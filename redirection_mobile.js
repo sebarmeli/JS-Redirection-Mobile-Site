@@ -48,10 +48,14 @@
 	 * 
 	 * To use this function, you need to call it as SA.redirection_mobile(config);
 	 * E.g. SA.redirection_mobile ({param:"isDefault", mobile_prefix : "mobile", cookie_hours : "2" })
+	 * or
+	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
+	 * or
+	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_sheme : "https"})
 	 *
 	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
-	 * @version 0.3 
+	 * @version 0.5 
 	 * 
 	 */
 	
@@ -59,10 +63,12 @@
 	if (!window.SA) {window.SA = {};}
 
 	/*
-	 * @param config containing two fields: param (parameter to be passed to avoid
-	 *             mobile redirection), mobile_prefix (prefix appended to the 
-	 *             hostname), cookie_hours (number of hours cookie needs to exist after
-	 *			redirection to desktop site)
+	* @param config object containing three properties:
+	*			- param : parameter to be passed to avoid mobile redirection
+	*			- mobile_prefix : prefix appended to the hostname (such as "m" to redirect to "m.domain.com")
+	*			- mobile_url : mobile url to use for the redirection (such as "whatever.com" to redirect to "whatever.com" )
+	*			- mobile_scheme : url scheme (http/https) of the mobile site domain
+	*			- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site
 	*/
 	SA.redirection_mobile = function(config) {
 		
@@ -83,23 +89,32 @@
 		// Retrieve the User Agent of the browser
 		var agent = navigator.userAgent.toLowerCase(),
 		
-			// param value or default value
-			param = config.param || "isStandardSite",
-			
-			// Constant
+			// Constants
 			TRUE = "true",
 		
-			// "m" is the default mobile hostname prefix 
+			// parameter to be passed to avoid mobile redirection
+			param = config.param || "isStandardSite",
+			
+			// prefix appended to the hostname
 			mobile_prefix = config.mobile_prefix || "m",
+			
+			// new url for the mobile site domain 
+			mobile_url = config.mobile_url,
+			
+			// protocol for the mobile site domain 
+			mobile_protocol = config.mobile_scheme ?
+								config.mobile_scheme + ":" :
+									document.location.protocol,
 			
 			// URL host of incoming request
 		    host = document.location.host,
 		
-			// Compose the mobile hostname
-			mobile_host = mobile_prefix + "." + 
-							(!!host.match(/^www\./i) ?
-								host.substring(4) : 
-									host),
+			// Compose the mobile hostname considering "mobile_url" or "mobile_prefix"+hostname
+			mobile_host = mobile_url ||
+							(mobile_prefix + "." + 
+								(!!host.match(/^www\./i) ?
+									host.substring(4) : 
+										host)),
 			
 			// Expiry hours for cookie
 			cookie_hours = config.cookie_hours || 1,
@@ -130,6 +145,6 @@
 								
 		// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 		if (isUAMobile && !(isCookieSet || isSessionStorage)) {
-		   document.location.href = document.location.protocol + "//" + mobile_host;
+		   document.location.href = mobile_protocol + "//" + mobile_host;
 		} 
 	};	

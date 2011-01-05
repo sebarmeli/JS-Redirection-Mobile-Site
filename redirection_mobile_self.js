@@ -9,10 +9,10 @@
 	/* 
 	* This version is exactly the same as redirection_mobile.js, but it's an anonymous self-executing
 	* function, and it's using the default values for param ("isStandardSite"), mobile_prefix("m"),
-	* and cookie_hour(1). In this way you can drop this file on your web server with o configuration
+	* mobile_url("") and cookie_hour(1). In this way you can drop this file on your web server with no configuration
 	* 
 	* @author Sebastiano Armeli-Battana
-	* @version 0.3 
+	* @version 0.5 
 	* 
 	*/
 
@@ -32,28 +32,35 @@
 			return exdate;
 
 		};
-					
+		
 		// Retrieve the User Agent of the browser
 		var agent = navigator.userAgent.toLowerCase(),
 		
-			// param value or default value
-			param = "isStandardSite",
-			
-			// Constant
+			// Constants
 			TRUE = "true",
 		
-			// "m" is the default mobile hostname prefix 
+			// parameter to be passed to avoid mobile redirection
+			param = "isStandardSite",
+			
+			// prefix appended to the hostname
 			mobile_prefix = "m",
+			
+			// new url for the mobile site domain 
+			mobile_url = "",
+			
+			// protocol for the mobile site domain 
+			mobile_protocol = document.location.protocol,
 			
 			// URL host of incoming request
 		    host = document.location.host,
 		
-			// Compose the mobile hostname
-			mobile_host = mobile_prefix + "." + 
-							(!!host.match(/^www\./i) ?
-								host.substring(4) : 
-									host),
-			
+			// Compose the mobile hostname considering "mobile_url" or "mobile_prefix"+hostname
+			mobile_host = mobile_url ||
+							(mobile_prefix + "." + 
+								(!!host.match(/^www\./i) ?
+									host.substring(4) : 
+										host)),
+					
 			// Expiry hours for cookie
 			cookie_hours = 1,
 		
@@ -83,7 +90,7 @@
 								
 		// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 		if (isUAMobile && !(isCookieSet || isSessionStorage)) {
-		   document.location.href = document.location.protocol + "//" + mobile_host;
+		   document.location.href = mobile_protocol + "//" + mobile_host;
 		}
 	
 }(window, document, navigator));
