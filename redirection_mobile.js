@@ -59,6 +59,7 @@
 	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
 	 * @version 0.6 
+	 * @date 21/01/2011 
 	 * 
 */
 	
