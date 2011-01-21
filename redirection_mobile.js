@@ -162,7 +162,7 @@ SA.redirection_mobile = function(config) {
 			window.sessionStorage.setItem(redirection_param, FALSE);
 		} else {
 			document.cookie = redirection_param + "=" + FALSE + ";expires="+
-												addTimeToDate(3600*1000*cookie_hours).toUTCString();
+								addTimeToDate(3600*1000*cookie_hours).toUTCString();
 		}
 	}
 	
