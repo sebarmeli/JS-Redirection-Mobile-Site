@@ -37,7 +37,7 @@ Below you can see an example that can clarify on how to use the script to redire
 	</code>
 </pre>
 
-If you hit a page such as "http://domain.com/?mobile_redirect=false" the redirection won't happen.  For all the browser session, if sessionStorage is supported by the browser, the redirection won't occur. If sessionStorage (HTML5) is not supported, a cookie named "mobile_redirect" will be stored for 2 hours and it will block the redirection to the mobile site.
+Considering the previous code, from version 0.6, if you hit a page such as "http://domain.com/?mobile_redirect=false" the redirection won't happen.  For all the browser session, if sessionStorage is supported by the browser, the redirection won't occur. If sessionStorage (HTML5) is not supported, a cookie "mobile_redirect=false" will be stored for 2 hours and it will block the redirection to the mobile site.
 
 Another example, if you'd like to redirect the user to "https://whatever.com/example" this is the invocation you need:
 
