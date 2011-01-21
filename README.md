@@ -11,12 +11,12 @@ There is a fallback for old browsers that don't support sessionStorage, and a co
 
 To use this function, you need to import the script in your page and call the SA.redirection_mobile() function. The function accepts an argument which is a configuration object with few properties:
 
-- mobile_prefix : prefix appended to the hostname, such as "m" to redirect to "m.domain.com". "m" is the default value if the property is not specified.
-- mobile_url : mobile url to use for the redirection (without the protocol), such as "whatever.com"/example to redirect to "whatever.com/example". If "mobile_prefix" is existing as well, "mobile_prefix" will be ignored. Empty string is the default value.
-- mobile_scheme : url scheme (http/https) of the mobile site domain, such as "https" to redirect to "https://m.domain.com". The protocol of the current page is the default value.
-- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect". 		 Eg: http://domain.com?mobile_redirect=false 
-						It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
-- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
+- #mobile_prefix : prefix appended to the hostname, such as "m" to redirect to "m.domain.com". "m" is the default value if the property is not specified.
+- #mobile_url : mobile url to use for the redirection (without the protocol), such as "whatever.com"/example to redirect to "whatever.com/example". If "mobile_prefix" is existing as well, "mobile_prefix" will be ignored. Empty string is the default value.
+- #mobile_scheme : url scheme (http/https) of the mobile site domain, such as "https" to redirect to "https://m.domain.com". The protocol of the current page is the default value.
+- #redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect". 		 Eg: http://domain.com?mobile_redirect=false
+It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
+- #cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
 
 Below you can see an example that can clarify on how to use the script to redirect the user to "http://mobile.domain.com" from "http://domain.com":
 
