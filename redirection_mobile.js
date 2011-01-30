@@ -50,11 +50,11 @@
 * To use this function, you need to call it as SA.redirection_mobile(config);
 	 * E.g. SA.redirection_mobile ({redirection_paramName : "modile_redirect", mobile_prefix : "mobile", cookie_hours : "2" })
 	 * or
-	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
+	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_scheme : "https" })
 	 * or
-	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_sheme : "https"})
+	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
 	 * or
-	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_sheme : "https", redirection_paramName : "modile_redirect"})
+	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https", redirection_paramName : "modile_redirect"})
 	 *
 	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
