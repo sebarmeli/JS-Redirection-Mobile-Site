@@ -87,7 +87,7 @@
 									host)),
 
 		// Expiry hours for cookie
-		cookie_hours = config.cookie_hours || 1,
+		cookie_hours = 1,
 
 		// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
 		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone)/i));
