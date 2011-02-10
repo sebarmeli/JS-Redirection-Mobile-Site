@@ -47,6 +47,10 @@ window.TEST ={
 	
 	mockFFDesktopNavigator : {
 		userAgent : "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.6) Gecko/20100629 Firefox/3.6 ( .NET CLR 3.5.30729)"
+	},
+	
+	mockHTCdesireNavigator : {
+		userAgent : "Mozilla/5.0 (Linux; U; Android 2.2; es-es; HTC Desire HD 1.39.161.1 Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
 	}	
 };
 
@@ -63,6 +67,13 @@ test ('AndroidRedirection()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
 	window.TEST.config.redirection_paramName = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockAndroidNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for Android not happening");
+})
+
+test ('HTCRedirection()', function() {
+	window.TEST.mockDocument.location.host = "domain.com";
+	window.TEST.config.redirection_paramName = "";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHTCdesireNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for Android not happening");
 })
 

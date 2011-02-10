@@ -50,7 +50,7 @@
 * To use this function, you need to call it as SA.redirection_mobile(config);
 	 * E.g. SA.redirection_mobile ({redirection_paramName : "modile_redirect", mobile_prefix : "mobile", cookie_hours : "2" })
 	 * or
-	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_scheme : "https" })
+	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
 	 * or
 	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
 	 * or
@@ -58,7 +58,7 @@
 	 *
 	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
-	 * @version 0.6 
+	 * @version 0.7
 	 * @date 21/01/2011 
 	 * 
 */
@@ -154,7 +154,8 @@ SA.redirection_mobile = function(config) {
 		cookie_hours = config.cookie_hours || 1,
 
 		// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
-		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone)/i));
+		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
+
 
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
 	// querystring there is a parameter to avoid the redirection such as "?mobile_redirect=false"

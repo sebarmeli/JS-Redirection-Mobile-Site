@@ -92,5 +92,9 @@ Version 0.5 released
 
 Version 0.6 released - IMPORTANT Change in parameters -- "redirection_paramName" will replace "param"
 
+#Update 11/02/2011:
+
+Version 0.7 released - Added support for Nintendo WII and more HTC phones.
+
 
 Feel free to fork it!
