@@ -3,29 +3,23 @@
  *
  * Developed by
  * Sebastiano Armeli-Battana (@sebarmeli) - http://www.sebastianoarmelibattana.com
- * Release under the MIT licence
+ * Dual licensed under the MIT or GPL Version 3 licenses.
  */	
 /*
-	Copyright (c) 2011 Sebastiano Armeli-Battana (http://sebarmeli.com)
+	Copyright (c) 2011 Sebastiano Armeli-Battana (http://www.sebastianoarmelibattana.com)
 	
-	Permission is hereby granted, free of charge, to any person obtaining
-	a copy of this software and associated documentation files (the
-	"Software"), to deal in the Software without restriction, including
-	without limitation the rights to use, copy, modify, merge, publish,
-	distribute, sublicense, and/or sell copies of the Software, and to
-	permit persons to whom the Software is furnished to do so, subject to
-	the following conditions:
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-	The above copyright notice and this permission notice shall be
-	included in all copies or substantial portions of the Software.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-	NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-	LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-	OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-	WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+	You should have received a copy of the GNU General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	*/
 
 	/*
@@ -55,11 +49,16 @@
 	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
 	 * or
 	 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https", redirection_paramName : "modile_redirect"})
+	 * or
+	 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", ipad_redirection : "true"})
+	 * or
+	 * E.g. SA.redirection_mobile ({{mobile_url : "mobile.whatever.com/example", beforeredirection_callback : (function(){alert('2')}) }})
+	 *
 	 *
 	 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 	 * @author Sebastiano Armeli-Battana
-	 * @version 0.7
-	 * @date 21/01/2011 
+	 * @version 0.8
+	 * @date 02/04/2011 
 	 * 
 */
 	
@@ -75,6 +74,8 @@ if (!window.SA) {window.SA = {};}
 *			- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
 *									It's also the name of the item in the localStorage (or cookie name) to avoid mobile
 *									redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
+*			- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. - Default:false
+*			- beforeredirection_callback : callback launched before the redirection happens
 */
 SA.redirection_mobile = function(config) {
 
@@ -119,6 +120,7 @@ SA.redirection_mobile = function(config) {
 	
 		// Constants
 		FALSE = "false",
+		TRUE = "true",
 
 		// configuration object
 		config = config || {};
@@ -153,8 +155,8 @@ SA.redirection_mobile = function(config) {
 		// Expiry hours for cookie
 		cookie_hours = config.cookie_hours || 1,
 
-		// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
-		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
+		// Check if the UA is a mobile one (iphone, ipod, android, blackberry)
+		isUAMobile =!!(agent.match(/(iPhone|iPod|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
 
 
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
@@ -179,9 +181,24 @@ SA.redirection_mobile = function(config) {
 		isCookieSet = document.cookie ? 
 						(document.cookie.indexOf(redirection_param) >= 0) :
 							false;
+	
+	// iPad Check
+	if (!!(agent.match(/(iPad)/i))) {
+
+		// Check if the redirection needs to happen for iPad
+		(config.ipad_redirection === TRUE) ? isUAMobile = true : isUAMobile = false;
+
+	}
+
 
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 	if (isUAMobile && !(isCookieSet || isSessionStorage)) {
+		
+		// Callback call
+		if (config.beforeredirection_callback) {
+			config.beforeredirection_callback.call(this);
+		}
+		
 		document.location.href = mobile_protocol + "//" + mobile_host;
 	} 
 };	

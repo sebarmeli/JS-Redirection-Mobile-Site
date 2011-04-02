@@ -11,7 +11,7 @@
 * "window", "navigator" for testing purpose.
 * 
 * @author Sebastiano Armeli-Battana
-* @version 0.7 
+* @version 0.8
 * 
 */
 
@@ -27,6 +27,8 @@ if (!window.SA) {window.SA = {};}
 *			- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
 *									It's also the name of the item in the localStorage (or cookie name) to avoid mobile
 *									redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
+*			- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad.
+*			- beforeredirection_callback : callback launched before the redirection happens
 *
 */
 SA.redirection_mobile = function(document, window, navigator, config) {
@@ -72,6 +74,7 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 
 		// Constants
 		FALSE = "false",
+		TRUE = "true"
 
 		// configuration object
 		config = config || {};
@@ -106,8 +109,8 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 		// Expiry hours for cookie
 		cookie_hours = config.cookie_hours || 1,
 	
-		// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
-		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
+		// Check if the UA is a mobile one (iphone, ipod, android, blackberry)
+		isUAMobile =!!(agent.match(/(iPhone|iPod|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
 
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
 	// querystring there is a parameter to avoid the redirection such as "?mobile_redirect=false"
@@ -131,9 +134,22 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 		isCookieSet = document.cookie ? 
 						(document.cookie.indexOf(redirection_param) >= 0) :
 							false;
-							
+	
+	if (!!(agent.match(/(iPad)/i))) {
+
+		// Check if the redirection needs to happen for iPad
+		(config.ipad_redirection === TRUE) ? isUAMobile = true : isUAMobile = false;
+
+	}
+	
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 	if (isUAMobile && !(isCookieSet || isSessionStorage)) {
+		
+		// Callback call
+		if (config.beforeredirection_callback) {
+			config.beforeredirection_callback.call(this);
+		}
+		
 		document.location.href = mobile_protocol + "//" + mobile_host;
 	} 
 };

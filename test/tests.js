@@ -41,6 +41,10 @@ window.TEST ={
 		userAgent : "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
 	},
 	
+	mockIpadNavigator : {
+		userAgent : "Mozilla/5.0 (iPad; U; CPU OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B334b Safari/531.21.10"
+	},
+	
 	mockAndroidNavigator : {
 		userAgent : "Mozilla/5.0 (Linux; U; Android 0.5; en-us) AppleWebKit/522+ (KHTML, like Gecko) Safari/41"
 	},
@@ -122,6 +126,15 @@ test ('RedirectionToHttpstUrl()', function() {
 	ok (window.TEST.mockDocument.location.href === "https://m.domain.com", "Redirection to https://m.domain.com not happening");
 })
 
+test ('RedirectionIpad()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.ipad_redirection = "true";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "https://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
+})
+
 module("Redirection not happening");
 
 test ('RedirectionFromMobileToStandardVersion()', function() {
@@ -177,6 +190,11 @@ test ('NoRedirectionFromMobileBecauseOfParameter()', function() {
 	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/home", "Error in no Redirection happening from mobile");
 })
 
-
-
-
+test ('NoRedirectionIpad()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.ipad_redirection = "";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href !== "https://www.whatever.com/example", "Redirection happening");
+})

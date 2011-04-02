@@ -3,7 +3,7 @@
 This "redirection_mobile" script will cover a basic scenario of full JS mobile redirection. 
 It needs to be located in the desktop version of the site.
 
-The user will be redirected to the mobile version of the site if it's trying to access the site from a mobile device. This check is mainly done sniffing the User-Agent string. 
+The user will be redirected to the mobile version of the site if it's trying to access the site from a mobile device (iPad has NOT been included). This check is mainly done sniffing the User-Agent string. 
 	 
 In some cases the user wants to access to the Desktop version of the site from a mobile device (sometimes the desktop version has more functionality). The script handles this situation as well, it checks if the previous page hit was one from the mobile site (we can assume the user is trying to access to the "desktop" version from a mobile device) or if the url contains a specific parameter.In these case the redirection won't occur. 
 To keep the user in the desktop version for the whole session, sessionStorage object has been used, specifically an item will be stored to distinguish if we're browsing through the desktop site. 
@@ -17,6 +17,8 @@ To use this function, you need to import the script in your page and call the SA
 - redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect". 		 Eg: http://domain.com?mobile_redirect=false
 It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
 - cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
+- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. Default:"false". The value needs to be a string (so wrapped in double or single quotes)
+- beforeredirection_callback : callback launched before the redirection happens
 
 Below you can see an example that can clarify on how to use the script to redirect the user to "http://mobile.domain.com" from "http://domain.com":
 
@@ -52,12 +54,27 @@ Another example, if you'd like to redirect the user to "https://whatever.com/exa
 	</code>
 </pre>
 
+If you'd like to redirect the user to "https://whatever.com/example" even when using an Ipad, and if you need to execute a function before the redirection happens, this is the invocation you need:
+
+<pre>
+	<code>
+		&lt;script&gt;
+			 SA.redirection_mobile ({
+				ipad_redirection : "true",
+				beforeredirection_callback : (function(){alert("!");})
+			});
+		&lt;/script&gt;
+	</code>
+</pre>
+
 Alternatively you can use "redirection_mobile_self.js", that is an anonyimous self-executing function and it uses the default values for the different properties:
 - "mobile_prefix" : "m"
 - "redirection_paramName" : "mobile_redirect"
 - "cookie_hours" : 1
 - "mobile_url" : ""
-- "mobile_scheme" : protocol of the current page 
+- "mobile_scheme" : protocol of the current page
+- "ipad_redirection" : "false"
+- "beforeredirection_callback" : n/a
 
 It doesn't need any configuration or any invocation, so you just need to drop it in your webserver and call the script from your HTML.
 
@@ -96,5 +113,8 @@ Version 0.6 released - IMPORTANT Change in parameters -- "redirection_paramName"
 
 Version 0.7 released - Added support for Nintendo WII and more HTC phones.
 
+#Update 02/04/2011:
+
+Version 0.8 released - Added support for "ipad_redirection" and "beforeredirection_callback" properties. Ipad excluded from the standard redirection
 
 Feel free to fork it!

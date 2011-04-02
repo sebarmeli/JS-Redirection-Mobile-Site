@@ -12,7 +12,7 @@
 * 'mobile_url'("") and 'cookie_hour'(1). In this way you can drop this file on your web server with no configuration
 * 
 * @author Sebastiano Armeli-Battana
-* @version 0.7 
+* @version 0.8 
 * 
 */
 
@@ -60,6 +60,7 @@
 
 		// Constants
 		FALSE = "false",
+		TRUE = "true",
 
 		// parameter to pass in the URL to avoid the redirection
 		redirection_param = "mobile_redirect",
@@ -89,8 +90,8 @@
 		// Expiry hours for cookie
 		cookie_hours = 1,
 
-		// Check if the UA is a mobile one (iphone, ipod, ipad, android, blackberry)
-		isUAMobile =!!(agent.match(/(iPhone|iPod|iPad|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
+		// Check if the UA is a mobile one (iphone, ipod, android, blackberry)
+		isUAMobile =!!(agent.match(/(iPhone|iPod|blackberry|android|htc|kindle|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
 
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
 	// querystring there is a parameter to avoid the redirection such as "?mobile_redirect=false"
@@ -114,10 +115,11 @@
 		isCookieSet = document.cookie ? 
 						(document.cookie.indexOf(redirection_param) >= 0) :
 							false;
-							
+
+	
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 	if (isUAMobile && !(isCookieSet || isSessionStorage)) {
+		
 		document.location.href = mobile_protocol + "//" + mobile_host;
-	} 
-	
+	}
 }(window, document, navigator));
