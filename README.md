@@ -17,7 +17,7 @@ To use this function, you need to import the script in your page and call the SA
 - redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect". 		 Eg: http://domain.com?mobile_redirect=false
 It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
 - cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
-- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. Default:"false". The value needs to be a string (so wrapped in double or single quotes)
+- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. Default:"false". The value needs to be a string (so wrapped in double or single quotes).
 - beforeredirection_callback : callback launched before the redirection happens
 
 Below you can see an example that can clarify on how to use the script to redirect the user to "http://mobile.domain.com" from "http://domain.com":
@@ -92,6 +92,10 @@ The scripts have their minified versions (YUI compressor has been used).
 #Who is using it?
 
 Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/) 
+
+#Licence?
+
+Dual licensed under the MIT or GPL Version 3 licenses.
 
 #Update 21/11/2010:
 
