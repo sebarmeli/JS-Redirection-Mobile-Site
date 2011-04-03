@@ -44,7 +44,7 @@
 			queryStringArray = querystring && querystring.substring(1).split("&"),
 			i = 0,
 			length = queryStringArray.length;
-		
+
 		for (; i < length; i++) {
 			var token = queryStringArray[i],
 				firstPart = token && token.substring(0, token.indexOf("="));
@@ -82,10 +82,10 @@
 
 		// Compose the mobile hostname considering "mobile_url" or "mobile_prefix" + hostname
 		mobile_host = mobile_url ||
-						(mobile_prefix + "." + 
-							(!!host.match(/^www\./i) ?
-								host.substring(4) : 
-									host)),
+			(mobile_prefix + "." + 
+				(!!host.match(/^www\./i) ?
+					host.substring(4) : 
+						host)),
 
 		// Expiry hours for cookie
 		cookie_hours = 1,
@@ -102,19 +102,19 @@
 			window.sessionStorage.setItem(redirection_param, FALSE);
 		} else {
 			document.cookie = redirection_param + "=" + FALSE + ";expires="+
-												addTimeToDate(3600*1000*cookie_hours).toUTCString();
+				addTimeToDate(3600*1000*cookie_hours).toUTCString();
 		}
 	}
 
 	// Check if the sessionStorage contain the parameter
 	var isSessionStorage = (window.sessionStorage) ? 
-							(window.sessionStorage.getItem(redirection_param) === FALSE) :
-								false,
+		(window.sessionStorage.getItem(redirection_param) === FALSE) :
+			false,
 		
 		// Check if the Cookie has been set up
 		isCookieSet = document.cookie ? 
-						(document.cookie.indexOf(redirection_param) >= 0) :
-							false;
+			(document.cookie.indexOf(redirection_param) >= 0) :
+				false;
 
 	
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present

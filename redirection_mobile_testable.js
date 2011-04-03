@@ -20,15 +20,15 @@ if (!window.SA) {window.SA = {};}
 
 /*
 * @param config object containing three properties:
-*			- mobile_prefix : prefix appended to the hostname (such as "m" to redirect to "m.domain.com")
-*			- mobile_url : mobile url to use for the redirection (such as "whatever.com" to redirect to "whatever.com" ) - no scheme (http/https) required
-*			- mobile_scheme : url scheme (http/https) of the mobile site domain
-*			- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site
-*			- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
-*									It's also the name of the item in the localStorage (or cookie name) to avoid mobile
-*									redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
-*			- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad.
-*			- beforeredirection_callback : callback launched before the redirection happens
+*	- mobile_prefix : prefix appended to the hostname (such as "m" to redirect to "m.domain.com")
+*	- mobile_url : mobile url to use for the redirection (such as "whatever.com" to redirect to "whatever.com" ) - no scheme (http/https) required
+*	- mobile_scheme : url scheme (http/https) of the mobile site domain
+*	- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site
+*	- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
+*		It's also the name of the item in the localStorage (or cookie name) to avoid mobile
+*		redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
+*	- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad.
+*	- beforeredirection_callback : callback launched before the redirection happens
 *
 */
 SA.redirection_mobile = function(document, window, navigator, config) {
@@ -90,8 +90,8 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 
 		// protocol for the mobile site domain 
 		mobile_protocol = config.mobile_scheme ?
-							config.mobile_scheme + ":" :
-								document.location.protocol,
+			config.mobile_scheme + ":" :
+				document.location.protocol,
 
 		// URL host of incoming request
 		host = document.location.host,
@@ -101,10 +101,10 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 
 		// Compose the mobile hostname considering "mobile_url" or "mobile_prefix" + hostname
 		mobile_host = mobile_url ||
-						(mobile_prefix + "." + 
-							(!!host.match(/^www\./i) ?
-								host.substring(4) : 
-									host)),
+			(mobile_prefix + "." + 
+				(!!host.match(/^www\./i) ?
+					host.substring(4) : 
+						host)),
 		
 		// Expiry hours for cookie
 		cookie_hours = config.cookie_hours || 1,
@@ -121,19 +121,19 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 			window.sessionStorage.setItem(redirection_param, FALSE);
 		} else {
 			document.cookie = redirection_param + "=" + FALSE + ";expires="+
-												addTimeToDate(3600*1000*cookie_hours).toUTCString();
+				addTimeToDate(3600*1000*cookie_hours).toUTCString();
 		}
 	}
 
 	// Check if the sessionStorage contain the parameter
 	var isSessionStorage = (window.sessionStorage) ? 
-							(window.sessionStorage.getItem(redirection_param) === FALSE) :
-								false,
+			(window.sessionStorage.getItem(redirection_param) === FALSE) :
+				false,
 		
 		// Check if the Cookie has been set up
 		isCookieSet = document.cookie ? 
-						(document.cookie.indexOf(redirection_param) >= 0) :
-							false;
+			(document.cookie.indexOf(redirection_param) >= 0) :
+				false;
 	
 	if (!!(agent.match(/(iPad)/i))) {
 

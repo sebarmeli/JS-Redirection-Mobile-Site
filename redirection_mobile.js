@@ -72,8 +72,8 @@ if (!window.SA) {window.SA = {};}
 *			- mobile_scheme : url scheme (http/https) of the mobile site domain
 *			- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site
 *			- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
-*									It's also the name of the item in the localStorage (or cookie name) to avoid mobile
-*									redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
+*				It's also the name of the item in the localStorage (or cookie name) to avoid mobile
+*				redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
 *			- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. - Default:false
 *			- beforeredirection_callback : callback launched before the redirection happens
 */
@@ -176,7 +176,7 @@ SA.redirection_mobile = function(config) {
 	var isSessionStorage = (window.sessionStorage) ? 
 			(window.sessionStorage.getItem(redirection_param) === FALSE) :
 				false,
-		
+
 		// Check if the Cookie has been set up
 		isCookieSet = document.cookie ? 
 			(document.cookie.indexOf(redirection_param) >= 0) :
