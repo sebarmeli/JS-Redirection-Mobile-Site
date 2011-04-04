@@ -8,7 +8,9 @@ window.TEST ={
 	config : {
 		redirection_paramName : "mobile_redirect",
 	
-		mobile_prefix : "m"
+		mobile_prefix : "m",
+		
+		beforeredirection_callback : ""
 	},
 	
 	sessionStorage : {	
@@ -55,7 +57,16 @@ window.TEST ={
 	
 	mockHTCdesireNavigator : {
 		userAgent : "Mozilla/5.0 (Linux; U; Android 2.2; es-es; HTC Desire HD 1.39.161.1 Build/FRF91) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"
-	}	
+	},
+	
+	mockSamsungTabNavigator : {
+		userAgent : "Mozilla/5.0 (Linux; U; Android 2.2; en-us; SCH-I800 Build/FROYO) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1	"
+	},
+	
+	mockHtcNavigator : {
+		userAgent : "HTC-3470/1.2 Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Tablet PC 1.7; .NET CLR 2.0.50727; InfoPath.2)"
+	}
+	
 };
 
 module("Redirection happening");
@@ -102,7 +113,7 @@ test ('RedirectionTo/m()', function() {
 	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/m", "Redirection to http://www.domain.com/m not happening");
 })
 
-test ('RedirectionTomobile.()', function() {
+test ('RedirectionTomobile()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
 	window.TEST.config.mobile_prefix = "mobile";
 	window.TEST.config.mobile_url = "";
@@ -130,7 +141,34 @@ test ('RedirectionIpad()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
-	window.TEST.config.ipad_redirection = "true";
+	window.TEST.config.tablet_redirection = "true";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "https://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
+})
+
+test ('RedirectionHtc()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
+})
+
+test ('RedirectionSamsungTab()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.tablet_redirection = "true";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockSamsungTabNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "https://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
+})
+
+test ('RedirectionIpadBecauseOfCallback()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.tablet_redirection = "true";
+	window.TEST.config.beforeredirection_callback = (function(){return true ;});
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "https://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
 })
@@ -192,9 +230,52 @@ test ('NoRedirectionFromMobileBecauseOfParameter()', function() {
 
 test ('NoRedirectionIpad()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.href = "http://www.domain.com/home";
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
-	window.TEST.config.ipad_redirection = "";
+	window.TEST.config.tablet_redirection = "";
+	window.TEST.config.redirection_paramName = "ss";
+	window.TEST.sessionStorage = undefined;
+	window.TEST.mockDocument.cookie = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href !== "https://www.whatever.com/example", "Redirection happening");
+	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/home", "Redirection happening");
+})
+
+test ('NoRedirectionIpad2()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.href = "http://www.domain.com/home";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.tablet_redirection = "false";
+	window.TEST.config.redirection_paramName = "ee";
+	window.TEST.sessionStorage = undefined;
+	window.TEST.mockDocument.cookie = "";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href !== "https://www.whatever.com/example", "Redirection happening");
+	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/home", "Redirection happening");
+})
+
+test ('NoRedirectionBecauseOfCallback()', function() {
+	window.TEST.mockDocument.location.host = "http://www.domain.com/home";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.redirection_paramName = "aa";
+	window.TEST.sessionStorage = undefined;
+	window.TEST.mockDocument.cookie = "";
+	window.TEST.config.beforeredirection_callback = (function(){return false;});
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator,  window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/home", "Redirection for iPhone happening");
+})
+
+test ('NoRedirectionBecauseOfCallback2()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.href = "http://www.domain.com/page";
+	window.TEST.config.mobile_url = "www.whatever.com/example";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.redirection_paramName = "bb";
+	window.TEST.sessionStorage = undefined;
+	window.TEST.mockDocument.cookie = "";
+	window.TEST.config.beforeredirection_callback = (function(){var a = "hi";});
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/page", "Redirection happening");
 })

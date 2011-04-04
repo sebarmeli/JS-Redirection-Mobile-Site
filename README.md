@@ -17,8 +17,8 @@ To use this function, you need to import the script in your page and call the SA
 - redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect". 		 Eg: http://domain.com?mobile_redirect=false
 It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
 - cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
-- ipad_redirection : boolean value that enables/disables(default) the redirection for the iPad. Default:"false". The value needs to be a string (so wrapped in double or single quotes).
-- beforeredirection_callback : callback launched before the redirection happens
+- tablet_redirection : boolean value that enables/disables(default) the redirection for tablet such as iPad, Samsung Galaxy Tab, Kindle or Motorola Xoom. - Default:false. The value needs to be a string (so wrapped in double or single quotes).
+- beforeredirection_callback : if specified, callback launched before the redirection happens. If a falsy value is returned from the callback the redirection doesn't happen.
 
 Below you can see an example that can clarify on how to use the script to redirect the user to "http://mobile.domain.com" from "http://domain.com":
 
@@ -54,14 +54,26 @@ Another example, if you'd like to redirect the user to "https://whatever.com/exa
 	</code>
 </pre>
 
-If you'd like to redirect the user to "https://whatever.com/example" even when using an Ipad, and if you need to execute a function before the redirection happens, this is the invocation you need:
+If you'd like to redirect the user to "https://whatever.com/example" even when using an Ipad or a generic tablet:
 
 <pre>
 	<code>
 		&lt;script&gt;
 			 SA.redirection_mobile ({
-				ipad_redirection : "true",
-				beforeredirection_callback : (function(){alert("!");})
+				tablet_redirection : "true"
+			)
+			});
+		&lt;/script&gt;
+	</code>
+</pre>
+
+If you'd like to avoid the redirection to happen from a callback, this is the invocation you need:
+
+<pre>
+	<code>
+		&lt;script&gt;
+			 SA.redirection_mobile ({
+				beforeredirection_callback : (function(){alert("!"); return false;})
 			});
 		&lt;/script&gt;
 	</code>
@@ -73,7 +85,7 @@ Alternatively you can use "redirection_mobile_self.js", that is an anonyimous se
 - "cookie_hours" : 1
 - "mobile_url" : ""
 - "mobile_scheme" : protocol of the current page
-- "ipad_redirection" : "false"
+- "tablet_redirection" : "false"
 - "beforeredirection_callback" : n/a
 
 It doesn't need any configuration or any invocation, so you just need to drop it in your webserver and call the script from your HTML.
@@ -95,7 +107,7 @@ Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/
 
 #Licence?
 
-Dual licensed under the MIT or GPL Version 3 licenses.
+Dual licensed under the MIT and GPL Version 3 licenses.
 
 #Update 21/11/2010:
 
@@ -120,5 +132,9 @@ Version 0.7 released - Added support for Nintendo WII and more HTC phones.
 #Update 02/04/2011:
 
 Version 0.8 released - Added support for "ipad_redirection" and "beforeredirection_callback" properties. Ipad excluded from the standard redirection
+
+#Update 04/04/2011:
+
+Version 0.8.5 released - "ipad_redirection" changed into "tablet_redirection" to extend the feature to multiple tablets. "beforeredirection_callback" changed slightly to let avoid the redirection.
 
 Feel free to fork it!
