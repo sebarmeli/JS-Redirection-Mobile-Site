@@ -42,22 +42,22 @@
 * (default value) or you configure the expiry time.
 * 
 * To use this function, you need to call it as SA.redirection_mobile(config);
-* 	E.g. SA.redirection_mobile ({redirection_paramName : "modile_redirect", mobile_prefix : "mobile", cookie_hours : "2" })
+* E.g. SA.redirection_mobile ({redirection_paramName : "modile_redirect", mobile_prefix : "mobile", cookie_hours : "2" })
 * or
-* 	E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
+* E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
 * or
-* 	E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
+* E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
 * or
-* 	E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https", redirection_paramName : "modile_redirect"})
+* E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https", redirection_paramName : "modile_redirect"})
 * or
-* 	E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", tablet_redirection : "true"})
+* E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", tablet_redirection : "true"})
 * or
-* 	E.g. SA.redirection_mobile ({{mobile_url : "mobile.whatever.com/example", beforeredirection_callback : (function(){alert('2')}) }})
+* E.g. SA.redirection_mobile ({{mobile_url : "mobile.whatever.com/example", beforeredirection_callback : (function(){alert('2')}) }})
 *
 *
 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 * @author Sebastiano Armeli-Battana
-* @version 0.8.5
+* @version 0.8.6
 * @date 02/04/2011 
 * 
 */
@@ -66,7 +66,7 @@
 if (!window.SA) {window.SA = {};}
 
 /*
-* @param config object containing three properties:
+* @param configuration object containing three properties:
 *			- mobile_prefix : prefix appended to the hostname (such as "m" to redirect to "m.domain.com")
 *			- mobile_url : mobile url to use for the redirection (such as "whatever.com" to redirect to "whatever.com" )
 *			- mobile_scheme : url scheme (http/https) of the mobile site domain
@@ -77,7 +77,7 @@ if (!window.SA) {window.SA = {};}
 *			- tablet_redirection : boolean value that enables/disables(default) the redirection for tablet such as iPad, Samsung Galaxy Tab, Kindle or Motorola Xoom. - Default:false
 *			- beforeredirection_callback : callback launched before the redirection happens
 */
-SA.redirection_mobile = function(config) {
+SA.redirection_mobile = function(configuration) {
 
 	// Helper function for adding time to the current date
 	var addTimeToDate = function(msec) {
@@ -123,7 +123,7 @@ SA.redirection_mobile = function(config) {
 		TRUE = "true",
 
 		// configuration object
-		config = config || {};
+		config = configuration || {},
 	
 		// parameter to pass in the URL to avoid the redirection
 		redirection_param = config.redirection_paramName || "mobile_redirect",
@@ -186,7 +186,7 @@ SA.redirection_mobile = function(config) {
 	if (!!(agent.match(/(iPad|SCH-I800|xoom|kindle)/i))) {
 
 		// Check if the redirection needs to happen for iPad
-		(config.tablet_redirection === TRUE) ? isUAMobile = true : isUAMobile = false;
+		isUAMobile = (config.tablet_redirection === TRUE) ? true : false;
 
 	}
 

@@ -11,7 +11,7 @@
 * "window", "navigator" for testing purpose.
 * 
 * @author Sebastiano Armeli-Battana
-* @version 0.8.5
+* @version 0.8.6
 * 
 */
 
@@ -31,7 +31,7 @@ if (!window.SA) {window.SA = {};}
 *	- beforeredirection_callback : callback launched before the redirection happens
 *
 */
-SA.redirection_mobile = function(document, window, navigator, config) {
+SA.redirection_mobile = function(document, window, navigator, configuration) {
 
 		// Helper function for adding time to the current date
 	var addTimeToDate = function(msec) {
@@ -74,10 +74,10 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 
 		// Constants
 		FALSE = "false",
-		TRUE = "true"
+		TRUE = "true",
 
 		// configuration object
-		config = config || {};
+		config = configuration || {},
 
 		// parameter to pass in the URL to avoid the redirection
 		redirection_param = config.redirection_paramName || "mobile_redirect",
@@ -139,7 +139,7 @@ SA.redirection_mobile = function(document, window, navigator, config) {
 	if (!!(agent.match(/(iPad|SCH-I800|xoom|kindle)/i))) {
 
 		// Check if the redirection needs to happen for iPad
-		(config.tablet_redirection === TRUE) ? isUAMobile = true : isUAMobile = false;
+		isUAMobile = (config.tablet_redirection === TRUE) ? true : false;
 
 	}
 

@@ -12,7 +12,7 @@
 * 'mobile_url'("") and 'cookie_hour'(1). In this way you can drop this file on your web server with no configuration
 * 
 * @author Sebastiano Armeli-Battana
-* @version 0.8.5 
+* @version 0.8.6 
 * 
 */
 
@@ -60,7 +60,6 @@
 
 		// Constants
 		FALSE = "false",
-		TRUE = "true",
 
 		// parameter to pass in the URL to avoid the redirection
 		redirection_param = "mobile_redirect",

@@ -103,7 +103,7 @@ The scripts have their minified versions (YUI compressor has been used).
 
 #Who is using it?
 
-Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/) 
+Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/), OXiane (http://www.oxiane.com) 
 
 #Licence?
 
