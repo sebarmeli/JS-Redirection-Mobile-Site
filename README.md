@@ -137,4 +137,9 @@ Version 0.8 released - Added support for "ipad_redirection" and "beforeredirecti
 
 Version 0.8.5 released - "ipad_redirection" changed into "tablet_redirection" to extend the feature to multiple tablets. "beforeredirection_callback" changed slightly to let avoid the redirection.
 
+#Update 12/04/2011:
+
+Version 0.8.6 released - JSLint fixes
+
+
 Feel free to fork it!
