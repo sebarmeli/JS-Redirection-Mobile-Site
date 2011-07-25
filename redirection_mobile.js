@@ -42,23 +42,25 @@
 * (default value) or you configure the expiry time.
 * 
 * To use this function, you need to call it as SA.redirection_mobile(config);
-* E.g. SA.redirection_mobile ({redirection_paramName : "modile_redirect", mobile_prefix : "mobile", cookie_hours : "2" })
+* E.g. SA.redirection_mobile ({noredirection_param : "noredirection", mobile_prefix : "mobile", cookie_hours : "2" })
 * or
 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", mobile_sheme : "https" })
 * or
-* E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https"})
+* E.g. SA.redirection_mobile ({mobile_prefix : "mobile"})
 * or
 * E.g. SA.redirection_mobile ({mobile_prefix : "mobile", mobile_scheme : "https", redirection_paramName : "modile_redirect"})
 * or
 * E.g. SA.redirection_mobile ({mobile_url : "mobile.whatever.com/example", tablet_redirection : "true"})
 * or
 * E.g. SA.redirection_mobile ({{mobile_url : "mobile.whatever.com/example", beforeredirection_callback : (function(){alert('2')}) }})
+* or
+* E.g. SA.redirection_mobile ({{mobile_url : "mobile.whatever.com", tablet_url : "tablet.whatever.com")
 *
 *
 * @link http://github.com/sebarmeli/JS-Redirection-Mobile-Site/
 * @author Sebastiano Armeli-Battana
-* @version 0.8.6
-* @date 02/04/2011 
+* @version 0.9.5
+* @date 25/07/2011 
 * 
 */
 	
@@ -68,13 +70,17 @@ if (!window.SA) {window.SA = {};}
 /*
 * @param configuration object containing three properties:
 *			- mobile_prefix : prefix appended to the hostname (such as "m" to redirect to "m.domain.com")
-*			- mobile_url : mobile url to use for the redirection (such as "whatever.com" to redirect to "whatever.com" )
+*			- mobile_url : mobile url to use for the redirection (such as "mobile.whatever.com" to redirect to "whatever.com" )
 *			- mobile_scheme : url scheme (http/https) of the mobile site domain
 *			- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site
-*			- redirection_paramName : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false").
+*			- noredirection_param : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "true").
 *				It's also the name of the item in the localStorage (or cookie name) to avoid mobile
-*				redirection. Default value is "mobile_redirect". Eg: http://domain.com?mobile_redirect=false
+*				redirection. Default value is "noredirection". Eg: http://domain.com?noredirection=true
 *			- tablet_redirection : boolean value that enables/disables(default) the redirection for tablet such as iPad, Samsung Galaxy Tab, Kindle or Motorola Xoom. - Default:false
+*				Default Url for redirection will be the same as the one for mobile devices.
+*			- tablet_url : url to use for the redirection in case user is using a tablet to access the site
+*			- keep_path : boolean to determine if the destination url needs to keep the path from the original url
+*			- keep_query : boolean to determine if the destination url needs to keep the querystring from the original url
 *			- beforeredirection_callback : callback launched before the redirection happens
 */
 SA.redirection_mobile = function(configuration) {
@@ -126,7 +132,7 @@ SA.redirection_mobile = function(configuration) {
 		config = configuration || {},
 	
 		// parameter to pass in the URL to avoid the redirection
-		redirection_param = config.redirection_paramName || "mobile_redirect",
+		redirection_param = config.noredirection_param || "noredirection",
 		
 		// prefix appended to the hostname
 		mobile_prefix = config.mobile_prefix || "m",
@@ -154,7 +160,14 @@ SA.redirection_mobile = function(configuration) {
 
 		// Expiry hours for cookie
 		cookie_hours = config.cookie_hours || 1,
+		
+		// Parameters to determine if the pathname and the querystring need to be kept
+		keep_path = config.keep_path || false,
+		keep_query = config.keep_query || false,
 
+		// new url for the tablet site domain 
+		tablet_host = config.tablet_url || mobile_host,
+		
 		// Check if the UA is a mobile one (iphone, ipod, android, blackberry)
 		isUAMobile =!!(agent.match(/(iPhone|iPod|blackberry|android 0.5|htc|lg|midp|mmp|mobile|nokia|opera mini|palm|pocket|psp|sgh|smartphone|symbian|treo mini|Playstation Portable|SonyEricsson|Samsung|MobileExplorer|PalmSource|Benq|Windows Phone|Windows Mobile|IEMobile|Windows CE|Nintendo Wii)/i));
 
@@ -162,19 +175,19 @@ SA.redirection_mobile = function(configuration) {
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
 	// querystring there is a parameter to avoid the redirection such as "?mobile_redirect=false"
 	// (in that case we need to set a variable in the sessionStorage or in the cookie)
-	if (document.referrer.indexOf(mobile_host) >= 0 || queryValue === FALSE ) {
+	if (document.referrer.indexOf(mobile_host) >= 0 || queryValue === TRUE ) {
 
 		if (window.sessionStorage) {
-			window.sessionStorage.setItem(redirection_param, FALSE);
+			window.sessionStorage.setItem(redirection_param, TRUE);
 		} else {
-			document.cookie = redirection_param + "=" + FALSE + ";expires="+
+			document.cookie = redirection_param + "=" + TRUE + ";expires="+
 				addTimeToDate(3600*1000*cookie_hours).toUTCString();
 		}
 	}
 
 	// Check if the sessionStorage contain the parameter
 	var isSessionStorage = (window.sessionStorage) ? 
-			(window.sessionStorage.getItem(redirection_param) === FALSE) :
+			(window.sessionStorage.getItem(redirection_param) === TRUE) :
 				false,
 
 		// Check if the Cookie has been set up
@@ -186,12 +199,12 @@ SA.redirection_mobile = function(configuration) {
 	if (!!(agent.match(/(iPad|SCH-I800|xoom|kindle)/i))) {
 
 		// Check if the redirection needs to happen for iPad
-		isUAMobile = (config.tablet_redirection === TRUE) ? true : false;
-
+		var isUATablet = (config.tablet_redirection === TRUE || !!config.tablet_url) ? true : false;
+		isUAMobile = false;
 	}
 
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
-	if (isUAMobile && !(isCookieSet || isSessionStorage)) {
+	if ((isUATablet || isUAMobile) && !(isCookieSet || isSessionStorage)) {
 
 		// Callback call
 		if (config.beforeredirection_callback) {
@@ -200,6 +213,21 @@ SA.redirection_mobile = function(configuration) {
 			}
 		}
 		
-		document.location.href = mobile_protocol + "//" + mobile_host;
+		var path_query = "";
+		
+		if(keep_path) { 
+			path_query += document.location.pathname;
+		}
+		
+		if (keep_query) {
+			path_query += document.location.search;
+		}
+		
+		if (isUATablet){
+			document.location.href = mobile_protocol + "//" + tablet_host + path_query;
+		} else if (isUAMobile) {
+			document.location.href = mobile_protocol + "//" + mobile_host + path_query;
+		}
+		
 	} 
 };	

@@ -6,7 +6,7 @@
 window.TEST ={
 	
 	config : {
-		redirection_paramName : "mobile_redirect",
+		noredirection_param : "noredirection",
 	
 		mobile_prefix : "m",
 		
@@ -31,6 +31,7 @@ window.TEST ={
 			protocol : "http:",
 			href : "http://domain.com/test",
 			host  : "domain.com",
+			pathname : "",
 			search : ""
 		},
 		
@@ -73,28 +74,28 @@ module("Redirection happening");
  
 test ('iPhoneRedirection()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator,  window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for iPhone not happening");
 })
 
 test ('AndroidRedirection()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockAndroidNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for Android not happening");
 })
 
 test ('HTCRedirection()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHTCdesireNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection for Android not happening");
 })
 
 test ('WWWRedirection()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://m.domain.com", "Redirection not happening");
 })
@@ -137,8 +138,22 @@ test ('RedirectionToHttpstUrl()', function() {
 	ok (window.TEST.mockDocument.location.href === "https://m.domain.com", "Redirection to https://m.domain.com not happening");
 })
 
+test ('RedirectionToParametertUrl()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.search = "?id=111";
+	window.TEST.mockDocument.location.pathname = "/mail/";
+	window.TEST.config.mobile_scheme = "http";
+	window.TEST.config.mobile_url = "m.domain.com";
+	window.TEST.config.keep_path = true;
+	window.TEST.config.keep_query = true;
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://m.domain.com/mail/?id=111", "Redirection to https://m.domain.com not happening");
+})
+
 test ('RedirectionIpad()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.search = "";
+	window.TEST.mockDocument.location.pathname = "";
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
 	window.TEST.config.tablet_redirection = "true";
@@ -173,24 +188,47 @@ test ('RedirectionIpadBecauseOfCallback()', function() {
 	ok (window.TEST.mockDocument.location.href === "https://www.whatever.com/example", "Redirection to https://m.domain.com not happening");
 })
 
+test ('RedirectionTabletAndMobileUrl()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.config.mobile_url = "m.whatever.com";
+	window.TEST.config.mobile_scheme = "https";
+	window.TEST.config.tablet_url = "tablet.whatever.com";
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "https://tablet.whatever.com", "Redirection to https://tablet.whatever.com not happening");
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "https://m.whatever.com", "Redirection to https://m.domain.com not happening");
+})
+
+test ('RedirectionKeepPathAndQuery()', function() {
+	window.TEST.mockDocument.location.host = "www.domain.com";
+	window.TEST.mockDocument.location.pathname = "/path1";
+	window.TEST.mockDocument.location.search = "?a=b";
+	window.TEST.config.mobile_url = "m.whatever.com";
+	window.TEST.config.mobile_scheme = "";
+	window.TEST.config.keep_path = true;
+	window.TEST.config.keep_query = true;
+	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	ok (window.TEST.mockDocument.location.href === "http://m.whatever.com/path1?a=b", "Redirection to https://m.domain.com not happening");
+})
+
 module("Redirection not happening");
 
 test ('RedirectionFromMobileToStandardVersion()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	window.TEST.config.mobile_prefix = "mobile";
 	window.TEST.config.mobile_url = "";
 	window.TEST.config.mobile_scheme = "";
 	window.TEST.mockDocument.cookie = "";
 	window.TEST.mockDocument.referrer = "http://mobile.domain.com/test";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
-	ok (window.TEST.sessionStorage.getItem("mobile_redirect") === "false", "Error in no Redirection happening from mobile");
+	ok (window.TEST.sessionStorage.getItem("noredirection") === "true", "Error in no Redirection happening from mobile");
 })
 
 test ('NoRedirectionFromDesktop()', function() {
 	window.TEST.mockDocument.location.host = "www.domain.com";
 	window.TEST.mockDocument.location.href = "http://www.domain.com/page";
-	window.TEST.config.redirection_paramName = "";
+	window.TEST.config.noredirection_param = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockFFDesktopNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/page", "Error in no redirection happening");
 })
@@ -198,9 +236,9 @@ test ('NoRedirectionFromDesktop()', function() {
 test ('NoRedirectionFromMobileBecauseOfSessionStorage()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
 	window.TEST.mockDocument.location.href = "http://domain.com/home";
-	window.TEST.config.redirection_paramName = "mobile_redirect";
+	window.TEST.config.noredirection_param = "noredirection";
 	window.TEST.mockDocument.referrer = "http://www.domain.com/test";
-	window.TEST.sessionStorage.setItem("mobile_redirect","false");
+	window.TEST.sessionStorage.setItem("noredirection","true");
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
 	
 	expect(1);
@@ -210,9 +248,9 @@ test ('NoRedirectionFromMobileBecauseOfSessionStorage()', function() {
 test ('NoRedirectionFromMobileBecauseOfCookie()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
 	window.TEST.mockDocument.location.href = "http://www.domain.com/home";
-	window.TEST.config.redirection_paramName = "mobile_redirect";
+	window.TEST.config.noredirection_param = "noredirection";
 	window.TEST.sessionStorage = undefined;
-	window.TEST.mockDocument.cookie = window.TEST.config.redirection_paramName;
+	window.TEST.mockDocument.cookie = window.TEST.config.noredirection_param;
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
 	ok (window.TEST.mockDocument.location.href === "http://www.domain.com/home", "Error in no Redirection happening from mobile");
 })
@@ -220,8 +258,8 @@ test ('NoRedirectionFromMobileBecauseOfCookie()', function() {
 test ('NoRedirectionFromMobileBecauseOfParameter()', function() {
 	window.TEST.mockDocument.location.host = "domain.com";
 	window.TEST.mockDocument.location.href = "http://www.domain.com/home";
-	window.TEST.mockDocument.location.search = "?mobile_redirect=false";
-	window.TEST.config.redirection_paramName = "mobile_redirect";
+	window.TEST.mockDocument.location.search = "?noredirection=true";
+	window.TEST.config.noredirection_param = "noredirection";
 	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIphoneNavigator, window.TEST.config);
@@ -234,7 +272,8 @@ test ('NoRedirectionIpad()', function() {
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
 	window.TEST.config.tablet_redirection = "";
-	window.TEST.config.redirection_paramName = "ss";
+	window.TEST.config.noredirection_param = "ss";
+	window.TEST.config.tablet_url = "";
 	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
@@ -248,7 +287,7 @@ test ('NoRedirectionIpad2()', function() {
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
 	window.TEST.config.tablet_redirection = "false";
-	window.TEST.config.redirection_paramName = "ee";
+	window.TEST.config.noredirection_param = "ee";
 	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = "";
 	SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockIpadNavigator, window.TEST.config);
@@ -259,7 +298,7 @@ test ('NoRedirectionIpad2()', function() {
 test ('NoRedirectionBecauseOfCallback()', function() {
 	window.TEST.mockDocument.location.host = "http://www.domain.com/home";
 	window.TEST.config.mobile_url = "www.whatever.com/example";
-	window.TEST.config.redirection_paramName = "aa";
+	window.TEST.config.noredirection_param = "aa";
 	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = "";
 	window.TEST.config.beforeredirection_callback = (function(){return false;});
@@ -272,7 +311,7 @@ test ('NoRedirectionBecauseOfCallback2()', function() {
 	window.TEST.mockDocument.location.href = "http://www.domain.com/page";
 	window.TEST.config.mobile_url = "www.whatever.com/example";
 	window.TEST.config.mobile_scheme = "https";
-	window.TEST.config.redirection_paramName = "bb";
+	window.TEST.config.noredirection_param = "bb";
 	window.TEST.sessionStorage = undefined;
 	window.TEST.mockDocument.cookie = "";
 	window.TEST.config.beforeredirection_callback = (function(){var a = "hi";});

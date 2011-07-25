@@ -12,7 +12,7 @@
 * 'mobile_url'("") and 'cookie_hour'(1). In this way you can drop this file on your web server with no configuration
 * 
 * @author Sebastiano Armeli-Battana
-* @version 0.8.6 
+* @version 0.9.5 
 * 
 */
 
