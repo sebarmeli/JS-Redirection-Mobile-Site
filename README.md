@@ -1,131 +1,143 @@
 # JS Mobile Redirection
 
-This "redirection_mobile" script will cover a basic scenario of full JS mobile redirection. 
-It needs to be located in the desktop version of the site.
+redirection_mobile.js is a utility script that covers a basic scenario for redirecting your website to a mobile verison through JavaScript.
 
-The user will be redirected to the mobile version of the site if it's trying to access the site from a mobile device (tablets have NOT been included by default). This check is mainly done sniffing the User-Agent string. 
+[![Build Status](https://secure.travis-ci.org/sebarmeli/JS-Redirection-Mobile-Site.png)](http://travis-ci.org/sebarmeli/JS-Redirection-Mobile-Site)
+
+It also covers the scenario where a user wants to access the Desktop version of the site from a mobile device (sometimes the desktop version has more functionality).
+
+The script handles tablets too, you can choose to redirect user to a mobile site or to a specific site for tablets (7'' or 10'').
+
+## Getting started
+
+The script needs to be put in the desktop version of the site.
+
+The script sniffs the User-Agent string and it decides if the redirection needs to happen.
 	 
-In some cases the user wants to access to the Desktop version of the site from a mobile device (sometimes the desktop version has more functionality). The script handles this situation as well.
+If the user decides to view the 'desktop' version from a mobile site, the user is kept on that version for the whole session. 
+(sessionStorage object has been used). 
+There is a fallback for old browsers that don't support sessionStorage, and a cookie is used. The cookie expiries in one hour or you configure the expiry time.
 
-To keep the user in the desktop version for the whole session, sessionStorage object has been used, specifically an item will be stored to distinguish if we're browsing through the desktop site. 
-There is a fallback for old browsers that don't support sessionStorage, and a cookie will be used. The cookie that makes the access to the desktop version from a mobile device possible will expiry in one hour or you configure the expiry time.
+To use this function, you need to import the "redirection_mobile.js" in your page and call the SA.redirection_mobile() function. 
 
-To use this function, you need to import the "redirection_mobile.js" in your page and call the SA.redirection_mobile() function. The function accepts a configuration object with few properties:
+```html
+	<!doctype html>
+	<html>
+		<head>
+			<script src="redireciton-mobile.js"></script>
+			<script>
+				SA.redirection_mobile();
+			</script>
+		</head>
+```
 
-- mobile_prefix : prefix appended to the hostname, such as "m" to redirect to "m.domain.com". "m" is the default value if the property is not specified.
-- mobile_url : mobile url to use for the redirection (without the protocol), such as "whatever.com"/example to redirect to "whatever.com/example". If "mobile_prefix" is existing as well, "mobile_prefix" will be ignored. Empty string is the default value.
-- mobile_scheme : url scheme (http/https) of the mobile site domain, such as "https" to redirect to "https://m.domain.com". The protocol of the current page is the default value.
-- noredirection_param : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "true" to avoid redirection). Default value is "noredirection".
-Eg: http://domain.com?noredirection=true
-It's also the name of the item in the localStorage (or cookie name) used to avoid mobile redirection. 
-- cookie_hours : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
-- tablet_redirection : boolean value that enables/disables(default) the redirection for tablet such as iPad, Samsung Galaxy Tab, Kindle or Motorola Xoom. - Default:false. The value needs to be a string (so wrapped in double or single quotes). If 'tablet_url' parameter not specified, the user will be redirected to the same URL as for mobile devices.
-- tablet_url : url to use for the redirection in case user is using a tablet to access the site. Default value is ""
-- keep_path : boolean to determine if the destination url needs to keep the path from the original url. Default value is 'false'
-- keep_query : boolean to determine if the destination url needs to keep the querystring from the original url. Default value is 'false'
-- beforeredirection_callback : if specified, callback launched before the redirection happens. If a falsy value is returned from the callback the redirection doesn't happen.
+## Config
 
-Below you can see an example that can clarify on how to use the script to redirect the user to "http://mobile.domain.com" from "http://domain.com":
+The function accepts few configurations:
 
-<pre>
-	<code>
-		&lt;script src="/js/redirection_mobile.js"&gt;&lt;/script&gt;
-	</code>
-</pre>
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				noredirection_param:"noredirection",
-				mobile_prefix : "mobile",
-				cookie_hours : "2" 
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+- `mobile_prefix` : prefix appended to the hostname. E.g. "m" to redirect to "m.domain.com". "m" is the default value if the property is not specified.
 
-Considering the previous code, from version 0.6, if you hit a page such as "http://domain.com/?noredirection=true" the redirection won't happen.  For all the browser session, if sessionStorage is supported by the browser, the redirection won't occur. If sessionStorage (HTML5) is not supported, a cookie "noredirection=true" will be stored for 2 hours and it will block the redirection to the mobile site.
+- `mobile_url` : mobile url to use for the redirection (without the protocol), such as "whatever.com"/example to redirect to "whatever.com/example". If "mobile_prefix" exists too, "mobile_prefix" is ignored. Empty string is the default value.
 
-Another example, if you'd like to redirect the user to "https://whatever.com/example" this is the invocation you need:
+- `mobile_scheme` : url scheme (http/https) of the mobile site domain, such as "https" to redirect to "https://m.domain.com". The protocol of the current page is the default value.
 
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				mobile_url : "whatever.com/example",
-				mobile_prefix : "https"
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+- `redirection_param` : parameter to pass in the querystring of the URL to avoid the redirection (the value must be equal to "false" to avoid redirection). Default value is "mobile_redirect".
+Eg: http://domain.com?mobile_redirect=false
+It is the name of the item in the sessionStorage (or cookie name) used to avoid mobile redirection. 
 
-If you'd like to redirect the user to "https://whatever.com/example" even when using an Ipad or a generic tablet:
+- `cookie_hours` : number of hours the cookie needs to exist after redirection to desktop site. "1" is the default value.
 
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				tablet_redirection : "true",
-				mobile_url : "whatever.com/example",
-				mobile_prefix : "https"
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+- `tablet_redirection` : boolean value that enables/disables(default) the redirection for tablet such as iPad, Samsung Galaxy Tab, Kindle or Motorola Xoom. - Default:false. The value needs to be a string (so wrapped in double or single quotes). If 'tablet_host' parameter not specified, the user will be redirected to the same URL as for mobile devices.
 
-If you'd like to avoid the redirection to happen from a callback, this is the invocation you need:
+- `tablet_host` : hostname to use for the redirection in case user is using a tablet to access the site. Default value is ""
 
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				beforeredirection_callback : (function(){alert("!"); return false;})
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+- `keep_path` : boolean to determine if the destination url needs to keep the path from the original url. Default value is 'false'
 
-Find below an example that handles when we want to redirect the user to two different URLs depending on the device the user is using (mobile or tablet):
+- `keep_query` : boolean to determine if the destination url needs to keep the querystring from the original url. Default value is 'false'
 
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				mobile_url : "mobile.whatever.com",
-				tablet_url : "tablet.whatever.com",
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+- `beforeredirection_callback` : if specified, callback launched before the redirection happens. If a falsy value is returned from the callback the redirection doesn't happen.
 
-If the user is accessing to a page such as "whatever.com/page1" and we want it to be redirected to "mobile.whatever.com/page1", that's how we should call redirection_mobile():
+## Examples
 
-<pre>
-	<code>
-		&lt;script&gt;
-			 SA.redirection_mobile ({
-				mobile_prefix : "mobile",
-				keep_path : true,
-				keep_query : true
-			});
-		&lt;/script&gt;
-	</code>
-</pre>
+If you want to redirect the user to "http://mobile.domain.com" from "http://domain.com":
 
-Alternatively you can use "redirection_mobile_self.js", that is an anonyimous self-executing function and it uses the default values for the different properties:
+```javascript
+	SA.redirection_mobile ({
+		redirection_param : "mobile_redirection",
+		mobile_prefix : "mobile",
+		cookie_hours : "2" 
+	});
+```
+
+If you want to redirect the user to "https://whatever.com/example":
+
+```javascript
+	SA.redirection_mobile ({
+		mobile_url : "whatever.com/example",
+		mobile_prefix : "https"
+	});
+```
+
+If you want to redirect the user to "https://whatever.com/example" even when using an Ipad or a generic tablet:
+
+```javascript
+	SA.redirection_mobile ({
+		tablet_redirection : "true",
+		mobile_url : "whatever.com/example",
+		mobile_prefix : "https"
+	});
+```
+
+If you want to avoid the redirection to happen from a callback, this is the invocation you need:
+
+```javascript
+	SA.redirection_mobile ({
+		beforeredirection_callback : (function(){alert("!"); return false;})
+	});
+```
+
+If you want to redirect the user to two different URLs depending on the device the user is using (mobile or tablet):
+
+```javascript
+	SA.redirection_mobile ({
+		mobile_url : "mobile.whatever.com",
+		tablet_url : "tablet.whatever.com",
+	});
+```
+
+If the user accesses to "whatever.com/page1" and you want to redirect him to "mobile.whatever.com/page1":
+
+```javascript
+	SA.redirection_mobile ({
+		mobile_prefix : "mobile",
+		keep_path : true,
+		keep_query : true
+	});
+```
+## What is 'redirection-mobile-self.js'?
+
+Alternatively you can use "redirection_mobile_self.js", that is an anonyimous self-executing function using the default values for the different properties:
+
 - "mobile_prefix" : "m"
-- "noredirection_param" : "noredirection"
+- "redirection_param" : "mobile_redirect"
 - "cookie_hours" : 1
 - "mobile_url" : ""
 - "mobile_scheme" : protocol of the current page
 - "tablet_redirection" : "false"
 - "keep_path" : false
 - "keep_query" : false
-- "tablet_url" : ""
+- "tablet_host" : ""
 - "beforeredirection_callback" : n/a
 
 It doesn't need any configuration or any invocation, so you just need to drop "it "redirection_mobile_self.js" on your webserver and call the script from your HTML.
 
+```html
+	<!doctype html>
+	<html>
+		<head>
+			<script src="redirection_mobile_self.js"></script>
+		</head>
+```
 <pre>
 	<code>
 		&lt;script src="/js/redirection_mobile_self.js"&gt;&lt;/script&gt;
@@ -133,52 +145,26 @@ It doesn't need any configuration or any invocation, so you just need to drop "i
 </pre>
 
 
-I also created "redirection_mobile_testable.js" that is just a copy from "redirection_mobile.js", but it's using few arguments such as "document", "window", "navigator" for testing purpose. Test cases have been written using QUnit.
+I also created 'redirection-mobile-testable.js' that is just a copy from "redirection_mobile.js", but it's using few arguments such as "document", "window", "navigator" for testing purpose. 
 
-The scripts have their minified versions (YUI compressor has been used).
+## Testing / Building the plugin
 
-#Who is using it?
+After getting node and npm, install grunt and grunt-jasmine-runner.
 
-Holden Australia (http://www.holden.com.au), Cityweb (http://www.citywebs.co.uk/), OXiane (http://www.oxiane.com), etc..
+```npm install grunt```
+```npm install grunt-jasmine-runner```
 
-#Licence?
+You can run Jasmine specs through phantomjs with :
 
-Dual licensed under the MIT and GPL Version 3 licenses.
+```grunt jasmine```
 
-#Update 21/11/2010:
+If you don't have phantomjs, please download it from [here](http://phantomjs.org/)
 
-All main mobile devices have been considered.
+You can run JSHint, Jasmine specs and minification tool simply launching: ```grunt```
 
-#Update 20/12/2010:
+## Licence
 
-Fixed a critical issue on IE
+Copyright (c) 2011-2012 Sebastiano Armeli-Battana
+Licensed under the MIT license.
+(https://github.com/sebarmeli/JS-Redirection-Mobile-Site/blob/master/MIT-LICENSE.
 
-#Update 06/01/2011:
-
-Version 0.5 released
-
-#Update 21/01/2011:
-
-Version 0.6 released - IMPORTANT Change in parameters -- "redirection_paramName" will replace "param"
-
-#Update 11/02/2011:
-
-Version 0.7 released - Added support for Nintendo WII and more HTC phones.
-
-#Update 02/04/2011:
-
-Version 0.8 released - Added support for "ipad_redirection" and "beforeredirection_callback" properties. Ipad excluded from the standard redirection
-
-#Update 04/04/2011:
-
-Version 0.8.5 released - "ipad_redirection" changed into "tablet_redirection" to extend the feature to multiple tablets. "beforeredirection_callback" changed slightly to let avoid the redirection.
-
-#Update 12/04/2011:
-
-Version 0.8.6 released - JSLint fixes
-
-#Update 25/07/2011:
-
-Version 0.9.5 released - "keep_path", "keep_query" and "tablet_url" parameters been added. Also 'noredirection_param' is used now instead of 'redirection_paramName'
-
-Feel free to fork it!

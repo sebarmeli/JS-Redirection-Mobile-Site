@@ -1,0 +1,16 @@
+{
+  "author": "AJ ONeal <coolaj86@gmail.com> (http://coolaj86.info)",
+  "name": "location",
+  "description": "A Browser-esque location object",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/coolaj86/node-location.git"
+  },
+  "main": "location.js",
+  "engines": {
+    "node": ">= 0.2.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

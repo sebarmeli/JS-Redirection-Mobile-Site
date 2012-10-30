@@ -1,0 +1,53 @@
+#Update 29/10/2012:
+
+Version 1.0.0 released - update to the regex for redirection. regexp from http://detectmobilebrowsers.com/ (WURFL)
+
+#Update 25/07/2011:
+
+Version 0.9.5 released - "keep_path", "keep_query" and "tablet_url" parameters been added. Also 'noredirection_param' is used now instead of 'redirection_paramName'
+
+#Update 12/04/2011:
+
+Version 0.8.6 released - JSLint fixes
+
+#Update 04/04/2011:
+
+Version 0.8.5 released - "ipad_redirection" changed into "tablet_redirection" to extend the feature to multiple tablets. "beforeredirection_callback" changed slightly to let avoid the redirection.
+
+#Update 02/04/2011:
+
+Version 0.8 released - Added support for "ipad_redirection" and "beforeredirection_callback" properties. Ipad excluded from the standard redirection
+
+#Update 11/02/2011:
+
+Version 0.7 released - Added support for Nintendo WII and more HTC phones.
+
+#Update 21/01/2011:
+
+Version 0.6 released - IMPORTANT Change in parameters -- "redirection_paramName" will replace "param"
+
+#Update 06/01/2011:
+
+Version 0.5 released
+
+#Update 20/12/2010:
+
+Fixed a critical issue on IE
+
+#Update 21/11/2010:
+
+All main mobile devices have been considered.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Feel free to fork it!

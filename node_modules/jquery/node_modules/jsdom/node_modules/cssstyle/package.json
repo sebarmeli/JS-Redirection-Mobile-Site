@@ -1,0 +1,38 @@
+{
+    "name": "cssstyle",
+    "description": "CSSStyleDeclaration Object Model implementation",
+    "keywords": ["CSS", "CSSStyleDeclaration", "StyleSheet"],
+    "version": "0.2.3",
+    "homepage": "https://github.com/chad3814/CSSStyleDeclaration",
+    "maintainers": [{
+        "name": "Chad Walker",
+        "email": "chad@chad-cat-lore-eddie.com",
+        "url": "https://github.com/chad3814"
+    }],
+    "contributors": [
+        {
+            "name": "Nikita Vasilyev",
+            "email": "me@elv1s.ru"
+        }
+    ],
+    "repository": {
+	"type": "git",
+	"url": "git://github.com/chad3814/CSSStyleDeclaration.git"
+    },
+    "bugs": {
+	"url": "https://github.com/chad3814/CSSStyleDeclaration/issues"
+    },
+    "directories": {
+	"lib": "./lib"
+    },
+    "main": "./lib/CSSStyleDeclaration.js",
+    "dependencies": {
+        "cssom"      : "0.2.x"
+    },
+    "licenses": [
+	{
+	    "type": "MIT",
+	    "url": "http://creativecommons.org/licenses/MIT/"
+	}
+    ]
+}

@@ -1,0 +1,29 @@
+{
+	"name": "redirection-mobile",
+	"version": "1.0.0",
+	"title": "JS-Redirection-Mobile",
+	"description": "JS to handle the redirection to the mobile version of your site",
+	"author": {
+		"name": "Sebastiano Armeli-Battana",
+		"url": "https://www.sebastianoarmelibattana.com",
+		"email": "seba.armeli@gmail.com"
+	},
+	"devDependencies": {
+		"grunt": "~0.3.9",
+		"grunt-jasmine-runner": "~0.5.9"
+	},
+	"scripts": {
+		"test": "grunt travis"
+	},
+	"keywords": [
+		"redirection",
+		"mobile"
+	],
+	"homepage": "https://github.com/sebarmeli/JS-Redirection-Mobile-Site",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/sebarmeli/JS-Redirection-Mobile-Site/blob/master/MIT-LICENSE.txt"
+		}
+	]
+}
