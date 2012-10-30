@@ -14,13 +14,6 @@
 *
 */
 
-/* 
-* This version is exactly the same as redirection_mobile.js, but it's an anonymous self-executing
-* function, and it's using the default values for 'redirection_paramName' ("mobile_redirect"), 'mobile_prefix'("m"),
-* 'mobile_url'("") and 'cookie_hour'(1). In this way you can drop this file on your web server with no configuration
-* 
-*/
-
 /*globals window, redirection_mobile, document, navigator, location */
 (function(window, document, navigator) {
 
@@ -123,6 +116,12 @@
 		isCookieSet = document.cookie ? 
 			(document.cookie.indexOf(redirection_param) >= 0) :
 				false;
+
+	// Check if the device is a Tablet such as iPad, Samsung Tab, Motorola Xoom or Amazon Kindle
+	if (!!(agent.match(/(iPad|SCH-I800|xoom|NOOK|silk|kindle|GT-P7510)/i))) {
+
+		isUAMobile = false;
+	}
 
 	// Check that User Agent is mobile, cookie is not set or value in the sessionStorage not present
 	if (isUAMobile && !(isCookieSet || isSessionStorage)) {
