@@ -24,7 +24,7 @@ To use this function, you need to import the "redirection_mobile.js" in your pag
 	<!doctype html>
 	<html>
 		<head>
-			<script src="redireciton-mobile.js"></script>
+			<script src="redirection-mobile.js"></script>
 			<script>
 				SA.redirection_mobile();
 			</script>
