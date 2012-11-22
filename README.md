@@ -101,7 +101,7 @@ If you want to redirect the user to two different URLs depending on the device t
 ```javascript
 	SA.redirection_mobile ({
 		mobile_url : "mobile.whatever.com",
-		tablet_url : "tablet.whatever.com",
+		tablet_host : "tablet.whatever.com",
 	});
 ```
 
