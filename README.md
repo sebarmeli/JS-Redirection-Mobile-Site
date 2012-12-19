@@ -57,6 +57,10 @@ It is the name of the item in the sessionStorage (or cookie name) used to avoid 
 
 - `beforeredirection_callback` : if specified, callback launched before the redirection happens. If a falsy value is returned from the callback the redirection doesn't happen.
 
+- `append_referrer` : boolean to determine if the document.referrer should be appended to the destination url. document.referrer will be URI encoded prior to appending.  Default value is 'false'
+
+- `append_referrer_key` : if specified, the key used for the document.referrer.  defaults to 'original_referrer'
+
 ## Examples
 
 If you want to redirect the user to "http://mobile.domain.com" from "http://domain.com":
