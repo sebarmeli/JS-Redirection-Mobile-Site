@@ -123,8 +123,8 @@ SA.redirection_mobile = function(configuration) {
 				false;
 
 	// Check if the device is a Tablet such as iPad, Samsung Tab, Motorola Xoom or Amazon Kindle
-	if (!!(agent.match(/(iPad|SCH-I800|xoom|NOOK|silk|kindle|GT-P7510)/i))) {
-
+	if (!!(agent.match(/(iPad|SCH-I|xoom|NOOK|silk|kindle|GT-P|touchpad|kindle|sch-t|viewpad|bolt|playbook)/i))) {
+		
 		// Check if the redirection needs to happen for tablets
 		isUATablet = (config.tablet_redirection === TRUE || !!config.tablet_host) ? true : false;
 		isUAMobile = false;
