@@ -1,7 +1,7 @@
 /*
 * JS Redirection Mobile
 *
-* Copyright (c) 2011 Sebastiano Armeli-Battana (http://www.sebastianoarmelibattana.com)
+* Copyright (c) 2011-2012 Sebastiano Armeli-Battana (http://www.sebastianoarmelibattana.com)
 *
 * By Sebastiano Armeli-Battana (@sebarmeli) - http://www.sebastianoarmelibattana.com
 * Licensed under the MIT license.
@@ -13,38 +13,31 @@
 * @version 1.0.0
 *
 */
-
+	
 /*globals window,document, navigator, SA */
 if (!window.SA) {window.SA = {};}
 
 SA.redirection_mobile = function(document, window, navigator, configuration) {
 
-		// Helper function for adding time to the current date
+	// Helper function for adding time to the current date -> used by cookie
 	var addTimeToDate = function(msec) {
-
-		// Get the current date
 		var exdate = new Date();
-
-		// Add time to the date
 		exdate.setTime(exdate.getTime() + msec);
-
-		//Return the new Date
 		return exdate;
-
 	};
-	
-	// Helper function for getting a value from a parameter in the querystring
+
+	// Helper function for getting a value from a parameter in the querystring of a URL
 	var getQueryValue = function(param) {
 
 		if (!param) {
 			return;
 		}
-		
+
 		var querystring = document.location.search,
 			queryStringArray = querystring && querystring.substring(1).split("&"),
 			i = 0,
 			length = queryStringArray.length;
-		
+
 		for (; i < length; i++) {
 			var token = queryStringArray[i],
 				firstPart = token && token.substring(0, token.indexOf("="));
@@ -54,10 +47,9 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 		}
 
 	};
-
+				
+	// Retrieve the User Agent of the browser
 	var agent = navigator.userAgent.toLowerCase(),
-	
-		// Constants
 		FALSE = "false",
 		TRUE = "true",
 
@@ -78,7 +70,6 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 			config.mobile_scheme + ":" :
 				document.location.protocol,
 		
-		// URL host of incoming request
 		host = document.location.host,
 
 		// value for the parameter passed in the URL to avoid the redirection
@@ -97,6 +88,10 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 		// Parameters to determine if the pathname and the querystring need to be kept
 		keep_path = config.keep_path || false,
 		keep_query = config.keep_query || false,
+		
+		//append referrer 
+		append_referrer = config.append_referrer || false,
+		append_referrer_key = config.append_referrer_key || "original_referrer",
 
 		// new url for the tablet site 
 		tablet_host = config.tablet_host || mobile_host,
@@ -109,7 +104,7 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 		}	
 
 	// Check if the referrer was a mobile page (probably the user clicked "Go to full site") or in the 
-	// querystring there is a parameter to avoid the redirection such as "?mobile_redirect=false"
+	// querystring there is a parameter to avoid the redirection such as "?noredireciton=true"
 	// (in that case we need to set a variable in the sessionStorage or in the cookie)
 	if (document.referrer.indexOf(mobile_host) >= 0 || queryValue === FALSE ) {
 
@@ -159,6 +154,15 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 			path_query += document.location.search;
 		}
 		
+		if (append_referrer && document.referrer) {
+			if (path_query.indexOf('?') === -1) {
+				path_query += "?";
+			} else {
+				path_query += "&";
+			}
+			path_query += append_referrer_key + "=" + encodeURIComponent(document.referrer);
+		}
+		
 		if (isUATablet){
 			document.location.href = mobile_protocol + "//" + tablet_host + path_query;
 		} else if (isUAMobile) {
@@ -166,4 +170,4 @@ SA.redirection_mobile = function(document, window, navigator, configuration) {
 		}
 		
 	} 
-};
+};	

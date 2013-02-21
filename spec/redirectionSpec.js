@@ -206,6 +206,53 @@ describe("using JS Redirection mobile", function(){
 		expect(window.TEST.mockDocument.location.href).toEqual("http://m.whatever.com/path1?a=b");
 	});
 
+	it("should redirect to a mobile site keeping the path, querystring and referrer if it's accessing the site from an iPhone", function(){
+		window.TEST.mockDocument.location.host = "www.domain.com";
+		window.TEST.mockDocument.location.pathname = "/path1";
+		window.TEST.mockDocument.location.search = "?a=b";
+		window.TEST.mockDocument.referrer = "http://google.com/sa?q=foo";
+		window.TEST.config.mobile_url = "m.whatever.com";
+		window.TEST.config.mobile_scheme = "";
+		window.TEST.config.keep_path = true;
+		window.TEST.config.keep_query = true;
+		window.TEST.config.append_referrer = true;
+		SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	
+		expect(window.TEST.mockDocument.location.href).toEqual("http://m.whatever.com/path1?a=b&original_referrer=http%3A%2F%2Fgoogle.com%2Fsa%3Fq%3Dfoo");
+	});
+
+	it("should redirect to a mobile site keeping the path, querystring and referrer with a key of g if it's accessing the site from an iPhone", function(){
+		window.TEST.mockDocument.location.host = "www.domain.com";
+		window.TEST.mockDocument.location.pathname = "/path1";
+		window.TEST.mockDocument.location.search = "?a=b";
+		window.TEST.mockDocument.referrer = "http://google.com/sa?q=foo";
+		window.TEST.config.mobile_url = "m.whatever.com";
+		window.TEST.config.mobile_scheme = "";
+		window.TEST.config.keep_path = true;
+		window.TEST.config.keep_query = true;
+		window.TEST.config.append_referrer = true;
+		window.TEST.config.append_referrer_key = "g";
+		SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	
+		expect(window.TEST.mockDocument.location.href).toEqual("http://m.whatever.com/path1?a=b&g=http%3A%2F%2Fgoogle.com%2Fsa%3Fq%3Dfoo");
+	});
+
+	it("should redirect to a mobile site keeping the path and appending the referrer with a key of g if it's accessing the site from an iPhone", function(){
+		window.TEST.mockDocument.location.host = "www.domain.com";
+		window.TEST.mockDocument.location.pathname = "/path1";
+		window.TEST.mockDocument.location.search = "?a=b";
+		window.TEST.mockDocument.referrer = "http://google.com/sa?q=foo";
+		window.TEST.config.mobile_url = "m.whatever.com";
+		window.TEST.config.mobile_scheme = "";
+		window.TEST.config.keep_path = true;
+		window.TEST.config.keep_query = false;
+		window.TEST.config.append_referrer = true;
+		window.TEST.config.append_referrer_key = "g";
+		SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockHtcNavigator, window.TEST.config);
+	
+		expect(window.TEST.mockDocument.location.href).toEqual("http://m.whatever.com/path1?g=http%3A%2F%2Fgoogle.com%2Fsa%3Fq%3Dfoo");
+	});
+
 	it("should redirect to a mobile site if it's accessing the site from an GTP", function(){
 		window.TEST.mockDocument.location.host = "www.domain.com";
 		window.TEST.mockDocument.location.search = "";
@@ -214,6 +261,10 @@ describe("using JS Redirection mobile", function(){
 		window.TEST.config.mobile_scheme = "https";
 		window.TEST.config.tablet_host = "";
 		window.TEST.config.tablet_redirection = "true";
+		window.TEST.config.keep_path = false;
+		window.TEST.config.keep_query = false;
+		window.TEST.config.append_referrer = false;
+		window.TEST.config.append_referrer_key = "g";
 		SA.redirection_mobile(window.TEST.mockDocument, window.TEST, window.TEST.mockGTPNavigator, window.TEST.config);
 		expect(window.TEST.mockDocument.location.href).toEqual("https://www.whatever.com/example");
 	});

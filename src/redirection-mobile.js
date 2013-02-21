@@ -88,6 +88,10 @@ SA.redirection_mobile = function(configuration) {
 		// Parameters to determine if the pathname and the querystring need to be kept
 		keep_path = config.keep_path || false,
 		keep_query = config.keep_query || false,
+		
+		//append referrer 
+		append_referrer = config.append_referrer || false,
+		append_referrer_key = config.append_referrer_key || "original_referrer",
 
 		// new url for the tablet site 
 		tablet_host = config.tablet_host || mobile_host,
@@ -148,6 +152,15 @@ SA.redirection_mobile = function(configuration) {
 		
 		if (keep_query) {
 			path_query += document.location.search;
+		}
+		
+		if (append_referrer && document.referrer) {
+			if (path_query.indexOf('?') === -1) {
+				path_query += "?";
+			} else {
+				path_query += "&";
+			}
+			path_query += append_referrer_key + "=" + encodeURIComponent(document.referrer);
 		}
 		
 		if (isUATablet){
